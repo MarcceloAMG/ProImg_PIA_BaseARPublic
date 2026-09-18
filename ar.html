@@ -148,16 +148,6 @@
 
         // -------------------------------------------------
         // 1) CONFIGURACIÓN DE MINDAR
-        //
-        //    imageTargetSrc debe apuntar a un archivo .mind
-        //    compilado a partir de la(s) imagen(es) que quieres
-        //    reconocer (los logos de los equipos).
-        //
-        //    Genera ese archivo con el compilador oficial:
-        //    https://hiukim.github.io/mind-ar-js-doc/tools/compile
-        //
-        //    Sube el .mind resultante junto a este archivo y
-        //    reemplaza la ruta de abajo (por ejemplo "targets.mind").
         // -------------------------------------------------
 
         const container = document.querySelector("#ar-container");
@@ -183,38 +173,13 @@
         scene.add(dirLight);
 
         // -------------------------------------------------
-        // 3) MODELO AR QUE SE MUESTRA SOBRE EL LOGO
-        //
-        //    Por defecto se genera un modelo simple (esfera +
-        //    etiqueta de texto) para que veas el flujo funcionando
-        //    sin depender de un archivo .glb externo.
-        //
-        //    Para usar tu propio modelo 3D (.glb/.gltf), importa
-        //    GLTFLoader y reemplaza este bloque, por ejemplo:
-        //
-        //    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-        //    const loader = new GLTFLoader();
-        //    loader.load("./models/equipo.glb", (gltf) => {
-        //        gltf.scene.scale.set(0.2, 0.2, 0.2);
-        //        modelGroup.add(gltf.scene);
-        //    });
-        //
-        //    Cuando compilas tu(s) logo(s) en
-        //    https://hiukim.github.io/mind-ar-js-doc/tools/compile
-        //    el orden en que subas las imágenes define su índice:
-        //    la 1ra imagen = targetIndex 0, la 2da = targetIndex 1, etc.
-        //
-        //    Aquí defines, por cada targetIndex, qué modelo .glb
-        //    cargar (o un modelo simple de respaldo si no pones
-        //    ninguna ruta). Agrega o quita objetos de este arreglo
-        //    según cuántas imágenes tenga tu targets.mind.
+        // 3) MODELOS AR POR TARGET
         // -------------------------------------------------
 
         import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
         const loader = new GLTFLoader();
 
-        // Referencias de la interfaz (se usan dentro de los eventos
-        // onTargetFound / onTargetLost de cada anchor, más abajo)
+        // Referencias de la interfaz
         const statusText = document.getElementById("status");
         const statusHint = document.getElementById("statusHint");
         const statusDot = document.getElementById("statusDot");
@@ -226,28 +191,19 @@
             {
                 targetIndex: 0,
                 nombre: "Bate",
-                modelPath: "./models/bate.glb", // <-- tu modelo del bate
-                scale: 0.15,          // ajusta el tamaño del modelo
-                rotationY: 0,         // gira el modelo si aparece de lado
-                yOffset: 0.05         // súbelo/bájalo sobre el logo
+                modelPath: "./models/bate.glb",
+                scale: 0.15,
+                rotationY: 0,
+                yOffset: 0.05
             },
             {
                 targetIndex: 14,
                 nombre: "Bate_Yankees",
-                modelPath: "./models/bate_Yankees.glb", // <-- tu modelo del bate de los Yankees
-                scale: 0.40,          // ajusta el tamaño del modelo
-                rotationY: 0,         // gira el modelo si aparece de lado
-                yOffset: 0.05         // súbelo/bájalo sobre el logo
+                modelPath: "./models/bate_Yankees.glb",
+                scale: 0.40,
+                rotationY: 0,
+                yOffset: 0.05
             }
-            // Ejemplo de un segundo logo con otro modelo:
-            // {
-            //     targetIndex: 1,
-            //     nombre: "Pelota",
-            //     modelPath: "./models/pelota.glb",
-            //     scale: 0.2,
-            //     rotationY: 0,
-            //     yOffset: 0.05
-            // }
         ];
 
         function crearEtiquetaTexto(texto, color = "#ffffff") {
@@ -349,9 +305,6 @@
 
                     (error) => {
 
-                        // Si el .glb no carga (ruta incorrecta, archivo
-                        // faltante, etc.) se usa el modelo de respaldo
-                        // para que igual veas algo sobre el logo.
                         console.warn(
                             `No se pudo cargar ${config.modelPath}, usando modelo de respaldo.`,
                             error
@@ -476,11 +429,6 @@
         let animando = false;
         let tiempo = 0;
 
-        // MindAR calcula el tamaño del <video> y del <canvas> por su
-        // cuenta (a veces deja franjas vacías si el aspect ratio de la
-        // cámara no coincide con el del contenedor). Esto los fuerza a
-        // cubrir siempre el 100% del contenedor, recortando lo que
-        // sobre — igual que object-fit: cover.
         function forzarVideoCompleto() {
 
             const video = container.querySelector("video");
@@ -531,14 +479,11 @@
                         }
 
                         // Anima cualquier modelo de respaldo activo
-                        // (esfera flotante, etc.)
                         objetosAnimados.forEach((obj) => {
                             if (obj.userData.animar) obj.userData.animar(tiempo);
                         });
 
                         // Gira cada modelo .glb sobre su propio eje Y.
-                        // Se suma "tiempo" a la rotación base para que
-                        // empiece desde el rotationY que definimos en config.
                         modelosAnimados.forEach(({ modelo, rotBase }) => {
                             modelo.rotation.y = rotBase + tiempo;
                         });
@@ -569,9 +514,6 @@
         document.getElementById("enableCameraBtn")
             .addEventListener("click", iniciarAR);
 
-        // MindAR recalcula el tamaño del video al rotar el celular o
-        // redimensionar la ventana, así que lo volvemos a forzar
-        // un instante después de que eso pase.
         window.addEventListener("resize", () => {
             setTimeout(forzarVideoCompleto, 300);
         });
@@ -579,12 +521,10 @@
             setTimeout(forzarVideoCompleto, 300);
         });
 
-        // Detener la cámara al salir de la vista, para no dejarla encendida
         window.addEventListener("beforeunload", () => {
             try { mindarThree.stop(); } catch (e) {}
         });
 
-        // Intentar arrancar automáticamente al cargar la página
         iniciarAR();
 
 
