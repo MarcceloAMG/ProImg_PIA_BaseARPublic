@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BaseAR - Realidad Aumentada</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- =========================
+         THREE.JS + MINDAR (Image Tracking)
+         Se cargan como módulos ES vía importmap.
+    ========================== -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+            "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
+        }
+    }
+    </script>
+</head>
+
+<body>
+
+    <div class="phone ar">
+
+        <!-- =========================
+             CONTENEDOR DE CÁMARA / AR
+             MindAR inyecta aquí el <video> y el <canvas> de Three.js
+        ========================== -->
+
+        <div id="ar-container" class="ar-container"></div>
+
+
+        <!-- =========================
+             HEADER
+        ========================== -->
+
+        <div class="header">
+
+            <button onclick="location.href='equipos.html'">
+                ‹
+            </button>
+
+            <div class="title">
+                ESCANEAR LOGO
+            </div>
+
+            <button onclick="location.href='info.html'">
+                ⚡
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             INSTRUCCIONES
+        ========================== -->
+
+        <div class="instructions" id="instructions">
+
+            <h2>
+                Apunta al logo del equipo
+            </h2>
+
+            <p>
+                Coloca el logo dentro del encuadre
+                para identificarlo
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+             ESTADO
+        ========================== -->
+
+        <div class="status">
+
+            <span class="dot" id="statusDot"></span>
+
+            <span id="status">
+                Iniciando cámara...
+            </span>
+
+            <p id="statusHint">
+                Concede permiso de cámara para comenzar
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+             BOTONES AR (Cámara, Confeti, Pausar)
+        ========================== -->
+
+        <div class="ar-buttons show" id="arButtons">
+
+            <button class="ar-btn confetti" id="confettiBtn">
+                <span class="ar-icon">🎊</span>
+                <span class="ar-label">Confeti</span>
+            </button>
+
+            <button class="ar-btn camera" id="cameraBtn">
+                <span class="ar-icon">📷</span>
+                <span class="ar-label">Foto</span>
+            </button>
+
+            <button class="ar-btn pause" id="pauseBtn">
+                <span class="ar-icon">⏸️</span>
+                <span class="ar-label">Pausar</span>
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             OVERLAY DE PERMISO DE CÁMARA
+             Se muestra si el navegador bloquea el acceso o mientras se solicita
+        ========================== -->
+
+        <div class="permission-overlay" id="permissionOverlay" style="display:none;">
+            <p id="permissionText">
+                Necesitamos acceso a tu cámara para
+                escanear el logo en realidad aumentada.
+            </p>
+            <button id="enableCameraBtn">
+                Permitir cámara
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT (MindAR + Three.js)
+    ========================== -->
+
+    <script type="module">
+
+        import * as THREE from "three";
+        import { MindARThree } from "mindar-image-three";
+
+        // -------------------------------------------------
+        // 1) CONFIGURACIÓN DE MINDAR
+        //
+        //    imageTargetSrc debe apuntar a un archivo .mind
+        //    compilado a partir de la(s) imagen(es) que quieres
+        //    reconocer (los logos de los equipos).
+        //
+        //    Genera ese archivo con el compilador oficial:
+        //    https://hiukim.github.io/mind-ar-js-doc/tools/compile
+        //
+        //    Sube el .mind resultante junto a este archivo y
+        //    reemplaza la ruta de abajo (por ejemplo "targets.mind").
+        // -------------------------------------------------
+
+        const container = document.querySelector("#ar-container");
+
+        const mindarThree = new MindARThree({
+            container: container,
+            imageTargetSrc: "./assets/targets.mind", // <-- reemplaza con tu archivo compilado
+            maxTrack: 1,
+            uiScanning: false,
+            uiLoading: false
+        });
+
+        const { renderer, scene, camera } = mindarThree;
+
+        // -------------------------------------------------
+        // 2) LUCES DE LA ESCENA
+        // -------------------------------------------------
+
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.1));
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.7);
+        dirLight.position.set(0.5, 1, 0.5);
+        scene.add(dirLight);
+
+        // -------------------------------------------------
+        // 3) MODELO AR QUE SE MUESTRA SOBRE EL LOGO
+        //
+        //    Por defecto se genera un modelo simple (esfera +
+        //    etiqueta de texto) para que veas el flujo funcionando
+        //    sin depender de un archivo .glb externo.
+        //
+        //    Para usar tu propio modelo 3D (.glb/.gltf), importa
+        //    GLTFLoader y reemplaza este bloque, por ejemplo:
+        //
+        //    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+        //    const loader = new GLTFLoader();
+        //    loader.load("./models/equipo.glb", (gltf) => {
+        //        gltf.scene.scale.set(0.2, 0.2, 0.2);
+        //        modelGroup.add(gltf.scene);
+        //    });
+        //
+        //    Cuando compilas tu(s) logo(s) en
+        //    https://hiukim.github.io/mind-ar-js-doc/tools/compile
+        //    el orden en que subas las imágenes define su índice:
+        //    la 1ra imagen = targetIndex 0, la 2da = targetIndex 1, etc.
+        //
+        //    Aquí defines, por cada targetIndex, qué modelo .glb
+        //    cargar (o un modelo simple de respaldo si no pones
+        //    ninguna ruta). Agrega o quita objetos de este arreglo
+        //    según cuántas imágenes tenga tu targets.mind.
+        // -------------------------------------------------
+
+        import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+        const loader = new GLTFLoader();
+
+        // Referencias de la interfaz (se usan dentro de los eventos
+        // onTargetFound / onTargetLost de cada anchor, más abajo)
+        const statusText = document.getElementById("status");
+        const statusHint = document.getElementById("statusHint");
+        const statusDot = document.getElementById("statusDot");
+        const instructions = document.getElementById("instructions");
+        const permissionOverlay = document.getElementById("permissionOverlay");
+        const permissionText = document.getElementById("permissionText");
+
+        const configuracionTargets = [
+            {
+                targetIndex: 0,
+                nombre: "Bate",
+                modelPath: "./models/bate.glb", // <-- tu modelo del bate
+                scale: 0.15,          // ajusta el tamaño del modelo
+                rotationY: 0,         // gira el modelo si aparece de lado
+                yOffset: 0.05         // súbelo/bájalo sobre el logo
+            },
+            {
+                targetIndex: 14,
+                nombre: "Bate_Yankees",
+                modelPath: "./models/bate_Yankees.glb", // <-- tu modelo del bate de los Yankees
+                scale: 0.40,          // ajusta el tamaño del modelo
+                rotationY: 0,         // gira el modelo si aparece de lado
+                yOffset: 0.05         // súbelo/bájalo sobre el logo
+            }
+            // Ejemplo de un segundo logo con otro modelo:
+            // {
+            //     targetIndex: 1,
+            //     nombre: "Pelota",
+            //     modelPath: "./models/pelota.glb",
+            //     scale: 0.2,
+            //     rotationY: 0,
+            //     yOffset: 0.05
+            // }
+        ];
+
+        function crearEtiquetaTexto(texto, color = "#ffffff") {
+
+            const canvas = document.createElement("canvas");
+            canvas.width = 512;
+            canvas.height = 128;
+
+            const ctx = canvas.getContext("2d");
+            ctx.font = "bold 64px Arial";
+            ctx.fillStyle = color;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(texto, canvas.width / 2, canvas.height / 2);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.needsUpdate = true;
+
+            const material = new THREE.SpriteMaterial({
+                map: texture,
+                transparent: true
+            });
+
+            const sprite = new THREE.Sprite(material);
+            sprite.scale.set(0.6, 0.15, 1);
+
+            return sprite;
+
+        }
+
+        // Modelo simple de respaldo (esfera + etiqueta) por si un
+        // target no tiene modelPath, o mientras se sube tu .glb real.
+        function crearModeloRespaldo(nombre) {
+
+            const grupo = new THREE.Group();
+
+            const geometria = new THREE.SphereGeometry(0.15, 32, 32);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                emissive: 0x1c5aff,
+                emissiveIntensity: 0.25,
+                roughness: 0.35,
+                metalness: 0.1
+            });
+            const esfera = new THREE.Mesh(geometria, material);
+            esfera.position.y = 0.18;
+            grupo.add(esfera);
+
+            const etiqueta = crearEtiquetaTexto(nombre.toUpperCase(), "#43a8ff");
+            etiqueta.position.y = -0.05;
+            grupo.add(etiqueta);
+
+            grupo.userData.animar = (t) => {
+                esfera.position.y = 0.18 + Math.sin(t * 2) * 0.03;
+            };
+
+            return grupo;
+
+        }
+
+        // Objetos que se animan (flotando) en cada frame
+        const objetosAnimados = [];
+
+        // Modelos .glb cargados, para rotarlos sobre su propio eje Y.
+        // Guardamos también su rotación base para no perder el rotationY de config.
+        const modelosAnimados = [];
+
+        // Por cada target: crea su anchor y le carga su modelo
+        configuracionTargets.forEach((config) => {
+
+            const anchor = mindarThree.addAnchor(config.targetIndex);
+            const modelGroup = new THREE.Group();
+            anchor.group.add(modelGroup);
+
+            if (config.modelPath) {
+
+                loader.load(
+
+                    config.modelPath,
+
+                    (gltf) => {
+
+                        const modelo = gltf.scene;
+                        modelo.scale.setScalar(config.scale ?? 0.15);
+                        modelo.rotation.y = config.rotationY ?? 0;
+                        modelo.position.y = config.yOffset ?? 0.05;
+                        modelGroup.add(modelo);
+
+                        // Guardamos el modelo y su rotación base para animarlo
+                        // en el bucle de render (giro sobre su propio eje Y).
+                        modelosAnimados.push({
+                            modelo,
+                            rotBase: config.rotationY ?? 0
+                        });
+
+                    },
+
+                    undefined,
+
+                    (error) => {
+
+                        // Si el .glb no carga (ruta incorrecta, archivo
+                        // faltante, etc.) se usa el modelo de respaldo
+                        // para que igual veas algo sobre el logo.
+                        console.warn(
+                            `No se pudo cargar ${config.modelPath}, usando modelo de respaldo.`,
+                            error
+                        );
+
+                        const respaldo = crearModeloRespaldo(config.nombre);
+                        modelGroup.add(respaldo);
+                        objetosAnimados.push(respaldo);
+
+                    }
+
+                );
+
+            } else {
+
+                const respaldo = crearModeloRespaldo(config.nombre);
+                modelGroup.add(respaldo);
+                objetosAnimados.push(respaldo);
+
+            }
+
+            // -------------------------------------------------
+            // 4) EVENTOS DE DETECCIÓN — por cada target
+            // -------------------------------------------------
+
+            anchor.onTargetFound = () => {
+
+                statusText.innerText = `¡${config.nombre} detectado!`;
+                statusHint.innerText = "Modelo AR activo";
+
+                statusDot.style.background = "#00ff88";
+                statusDot.style.boxShadow = "0 0 10px #00ff88";
+
+                instructions.style.opacity = "0";
+
+            };
+
+            anchor.onTargetLost = () => {
+
+                statusText.innerText = "Buscando logo...";
+                statusHint.innerText = "Apunta al logo del equipo";
+
+                statusDot.style.background = "";
+                statusDot.style.boxShadow = "";
+
+                instructions.style.opacity = "1";
+
+            };
+
+        });
+
+        // -------------------------------------------------
+        // 6) BOTONES: CONFETI, FOTO Y PAUSAR
+        // -------------------------------------------------
+
+        function lanzarConfeti() {
+
+            const colores = ["#36a5ff", "#feca57", "#4ecdc4", "#ffffff", "#ff6b6b"];
+            const phone = document.querySelector(".phone.ar");
+
+            for (let i = 0; i < 45; i++) {
+
+                const pieza = document.createElement("div");
+                pieza.className = "confetti-piece";
+                pieza.style.left = Math.random() * 100 + "%";
+                pieza.style.background =
+                    colores[Math.floor(Math.random() * colores.length)];
+                pieza.style.animationDuration = (2 + Math.random() * 1.5) + "s";
+
+                phone.appendChild(pieza);
+
+                setTimeout(() => pieza.remove(), 3600);
+
+            }
+
+        }
+
+        document.getElementById("confettiBtn")
+            .addEventListener("click", lanzarConfeti);
+
+        document.getElementById("cameraBtn")
+            .addEventListener("click", () => {
+
+                renderer.domElement.toBlob((blob) => {
+
+                    if (!blob) return;
+
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = "baseAR-foto.png";
+                    link.click();
+                    URL.revokeObjectURL(url);
+
+                });
+
+            });
+
+        let pausado = false;
+        const pauseBtn = document.getElementById("pauseBtn");
+
+        pauseBtn.addEventListener("click", () => {
+
+            pausado = !pausado;
+
+            if (pausado) {
+                mindarThree.pause();
+            } else {
+                mindarThree.unpause();
+            }
+
+            pauseBtn.classList.toggle("is-paused", pausado);
+            pauseBtn.querySelector(".ar-icon").textContent = pausado ? "▶️" : "⏸️";
+            pauseBtn.querySelector(".ar-label").textContent = pausado ? "Reanudar" : "Pausar";
+
+        });
+
+        // -------------------------------------------------
+        // 7) INICIO: SOLICITA CÁMARA Y ARRANCA EL TRACKING
+        // -------------------------------------------------
+
+        let animando = false;
+        let tiempo = 0;
+
+        // MindAR calcula el tamaño del <video> y del <canvas> por su
+        // cuenta (a veces deja franjas vacías si el aspect ratio de la
+        // cámara no coincide con el del contenedor). Esto los fuerza a
+        // cubrir siempre el 100% del contenedor, recortando lo que
+        // sobre — igual que object-fit: cover.
+        function forzarVideoCompleto() {
+
+            const video = container.querySelector("video");
+            const canvases = container.querySelectorAll("canvas");
+
+            [video, ...canvases].forEach((el) => {
+
+                if (!el) return;
+
+                el.style.setProperty("position", "absolute", "important");
+                el.style.setProperty("top", "0", "important");
+                el.style.setProperty("left", "0", "important");
+                el.style.setProperty("width", "100%", "important");
+                el.style.setProperty("height", "100%", "important");
+                el.style.setProperty("object-fit", "cover", "important");
+                el.style.setProperty("margin", "0", "important");
+                el.style.setProperty("transform", "none", "important");
+
+            });
+
+        }
+
+        async function iniciarAR() {
+
+            permissionOverlay.style.display = "none";
+            statusText.innerText = "Solicitando cámara...";
+
+            try {
+
+                await mindarThree.start();
+
+                forzarVideoCompleto();
+
+                statusText.innerText = "Buscando logo...";
+                statusHint.innerText = "Apunta al logo del equipo";
+
+                if (!animando) {
+
+                    animando = true;
+
+                    renderer.setAnimationLoop(() => {
+
+                        // Solo avanzamos el tiempo si NO está pausado.
+                        // Así el giro se congela exactamente donde está,
+                        // y al reanudar continúa desde el mismo ángulo.
+                        if (!pausado) {
+                            tiempo += 0.02;
+                        }
+
+                        // Anima cualquier modelo de respaldo activo
+                        // (esfera flotante, etc.)
+                        objetosAnimados.forEach((obj) => {
+                            if (obj.userData.animar) obj.userData.animar(tiempo);
+                        });
+
+                        // Gira cada modelo .glb sobre su propio eje Y.
+                        // Se suma "tiempo" a la rotación base para que
+                        // empiece desde el rotationY que definimos en config.
+                        modelosAnimados.forEach(({ modelo, rotBase }) => {
+                            modelo.rotation.y = rotBase + tiempo;
+                        });
+
+                        renderer.render(scene, camera);
+
+                    });
+
+                }
+
+            } catch (error) {
+
+                console.error("No se pudo iniciar la cámara:", error);
+
+                statusText.innerText = "Cámara no disponible";
+                statusHint.innerText = "Revisa los permisos";
+
+                permissionText.innerText =
+                    "No se pudo acceder a la cámara. Revisa los permisos " +
+                    "del navegador y vuelve a intentarlo.";
+
+                permissionOverlay.style.display = "flex";
+
+            }
+
+        }
+
+        document.getElementById("enableCameraBtn")
+            .addEventListener("click", iniciarAR);
+
+        // MindAR recalcula el tamaño del video al rotar el celular o
+        // redimensionar la ventana, así que lo volvemos a forzar
+        // un instante después de que eso pase.
+        window.addEventListener("resize", () => {
+            setTimeout(forzarVideoCompleto, 300);
+        });
+        window.addEventListener("orientationchange", () => {
+            setTimeout(forzarVideoCompleto, 300);
+        });
+
+        // Detener la cámara al salir de la vista, para no dejarla encendida
+        window.addEventListener("beforeunload", () => {
+            try { mindarThree.stop(); } catch (e) {}
+        });
+
+        // Intentar arrancar automáticamente al cargar la página
+        iniciarAR();
+
+
+    </script>
+
+</body>
+
+</html>

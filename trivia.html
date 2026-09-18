@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BaseAR - Trivia</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="phone trivia-page">
+
+        <div class="info-header">
+            <button class="back" onclick="location.href='info.html'">‹</button>
+            <h2>Trivia</h2>
+        </div>
+
+        <div class="trivia-progress">
+            <span class="question-counter">Pregunta 1 de 5</span>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 20%;"></div>
+            </div>
+        </div>
+
+        <div class="trivia-question">
+            <div class="question-icon">🧠</div>
+            <h3>¿En qué año se fundó el equipo?</h3>
+            <div class="question-options">
+                <button class="option">A) 1901</button>
+                <button class="option">B) 1923</button>
+                <button class="option correct">C) 1903</button>
+                <button class="option">D) 1915</button>
+            </div>
+            <div class="question-feedback correct-feedback">
+                ✅ ¡Correcto! El equipo se fundó en 1903.
+            </div>
+        </div>
+
+        <button class="trivia-next">SIGUIENTE PREGUNTA →</button>
+
+    </div>
+
+</body>
+
+</html>
