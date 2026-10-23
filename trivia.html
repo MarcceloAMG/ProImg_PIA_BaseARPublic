@@ -1,49 +1,122 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>BaseAR - Trivia</title>
-
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-
     <div class="phone trivia-page">
-
         <div class="info-header">
-            <button class="back" onclick="location.href='info.html'">‹</button>
+            <button class="back" id="btnBack">‹</button>
             <h2>Trivia</h2>
         </div>
 
         <div class="trivia-progress">
-            <span class="question-counter">Pregunta 1 de 5</span>
+            <span class="question-counter" id="questionCounter">Pregunta 1 de 1</span>
             <div class="progress-bar">
-                <div class="progress-fill" style="width: 20%;"></div>
+                <div class="progress-fill" id="progressFill" style="width: 100%;"></div>
             </div>
         </div>
 
         <div class="trivia-question">
             <div class="question-icon">🧠</div>
-            <h3>¿En qué año se fundó el equipo?</h3>
-            <div class="question-options">
-                <button class="option">A) 1901</button>
-                <button class="option">B) 1923</button>
-                <button class="option correct">C) 1903</button>
-                <button class="option">D) 1915</button>
+            <h3 id="questionText">Cargando...</h3>
+            <div class="question-options" id="optionsContainer">
+                <!-- Opciones inyectadas -->
             </div>
-            <div class="question-feedback correct-feedback">
-                ✅ ¡Correcto! El equipo se fundó en 1903.
-            </div>
+            <div class="question-feedback" id="feedbackContainer" style="display:none;"></div>
         </div>
 
-        <button class="trivia-next">SIGUIENTE PREGUNTA →</button>
-
+        <button class="trivia-next" id="btnNext" style="display:none;">SIGUIENTE PREGUNTA →</button>
     </div>
 
-</body>
+    <script src="js/teams-data.js"></script>
+    <script>
+        window.onload = function() {
+            if (typeof TEAMS_DATA === 'undefined') return;
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const teamId = urlParams.get('team') || 'yankees';
+            const data = TEAMS_DATA[teamId];
+
+            document.getElementById('btnBack').onclick = () => location.href = `info.html?team=${teamId}`;
+
+            if (data && data.trivia && data.trivia.length > 0) {
+                let currentQ = 0;
+                const questionText = document.getElementById('questionText');
+                const optionsContainer = document.getElementById('optionsContainer');
+                const feedbackContainer = document.getElementById('feedbackContainer');
+                const btnNext = document.getElementById('btnNext');
+
+                function renderQuestion() {
+                    const q = data.trivia[currentQ];
+                    
+                    // Actualizar progreso
+                    document.getElementById('questionCounter').innerText = `Pregunta ${currentQ + 1} de ${data.trivia.length}`;
+                    document.getElementById('progressFill').style.width = `${((currentQ + 1) / data.trivia.length) * 100}%`;
+
+                    questionText.innerText = q.question;
+                    optionsContainer.innerHTML = "";
+                    feedbackContainer.style.display = "none";
+                    btnNext.style.display = "none";
+
+                    const letras = ["A", "B", "C", "D"];
+                    q.options.forEach((opt, index) => {
+                        const btn = document.createElement('button');
+                        btn.className = "option";
+                        btn.innerText = `${letras[index]}) ${opt}`;
+                        btn.onclick = () => checkAnswer(index, btn);
+                        optionsContainer.appendChild(btn);
+                    });
+                }
+
+                function checkAnswer(selectedIndex, btnElement) {
+                    const q = data.trivia[currentQ];
+                    
+                    // Deshabilitar botones
+                    document.querySelectorAll('.option').forEach(b => b.style.pointerEvents = "none");
+
+                    if (selectedIndex === q.correct) {
+                        btnElement.classList.add('correct');
+                        feedbackContainer.className = "question-feedback correct-feedback";
+                        feedbackContainer.innerText = q.feedback;
+                    } else {
+                        btnElement.style.borderColor = "#ff6b6b";
+                        btnElement.style.color = "#ff6b6b";
+                        feedbackContainer.className = "question-feedback";
+                        feedbackContainer.style.background = "#4a1a1a";
+                        feedbackContainer.style.color = "#ff6b6b";
+                        feedbackContainer.innerText = "❌ Incorrecto. La respuesta era: " + q.options[q.correct];
+                    }
+
+                    feedbackContainer.style.display = "block";
+                    
+                    // Mostrar botón siguiente si hay más preguntas
+                    if (currentQ < data.trivia.length - 1) {
+                        btnNext.style.display = "block";
+                    } else {
+                        btnNext.innerText = "VOLVER AL INICIO";
+                        btnNext.style.display = "block";
+                    }
+                }
+
+                btnNext.onclick = () => {
+                    if (currentQ < data.trivia.length - 1) {
+                        currentQ++;
+                        renderQuestion();
+                    } else {
+                        location.href = `info.html?team=${teamId}`;
+                    }
+                };
+
+                renderQuestion(); // Iniciar trivia
+
+            } else {
+                document.getElementById('questionText').innerText = "No hay preguntas disponibles para este equipo.";
+            }
+        };
+    </script>
+</body>
 </html>

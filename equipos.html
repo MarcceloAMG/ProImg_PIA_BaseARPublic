@@ -1,96 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>BaseAR - Equipos</title>
-        <link rel="stylesheet" href="css/style.css">
-    </head>
-    <body>
-        <div class="phone info teams-page">
-            <div class="info-header">
-                <button class="back" onclick="location.href='index.html'">‹</button>
-                <h2>Baseball</h2>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaseAR - Equipos</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="phone-scroll info teams-page">
+        <div class="info-header">
+            <button class="back" onclick="location.href='index.html'">‹</button>
+            <h2>Liga Americana</h2>
+        </div>
+        
+        <div class="team-header">
+            <div class="team-logo">⚾</div>
+            <div class="team-data">
+                <h1>Equipos</h1>
+                <p>Explora la Liga Americana</p>
             </div>
-            <div class="team-header">
-                <div class="team-logo">⚾</div>
-                <div class="team-data">
-                    <h1>Inicio</h1>
-                    <p>Explora la Liga Americana</p>
-                </div>
-            </div>
-            <button class="ar-top-button" onclick="location.href='ar.html'">
+        </div>
+        
+        <button class="ar-top-button" onclick="location.href='ar.html'">
             📷 Escanear con AR
-            </button>
+        </button>
 
-            <h3 class="league-title">Liga Americana</h3>
-            <div class="teams-list">
-                <button class="team-option" onclick="location.href='info.html'">
-                    <div class="team-logo-placeholder">⚾</div>
-                    <div class="team-option-text">
-                        <strong>Baltimore Orioles</strong>
-                        <span>Baltimore, Maryland</span>
-                    </div>
-                    <div class="arrow">›</div>
-                </button>
-<button class="team-option" onclick="location.href='info.html'">
-    <div class="team-logo-placeholder">⚾</div>
-    <div class="team-option-text">
-        <strong>Cleveland Guardians</strong>
-        <span>Cleveland, Ohio</span>
+        <div class="teams-list">
+            <!-- BOTONES GENERADOS CON PARÁMETRO ?team=... -->
+            <button class="team-option" onclick="location.href='info.html?team=orioles'"><div class="team-logo-placeholder">⚾</div><strong>Orioles</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=redsox'"><div class="team-logo-placeholder">⚾</div><strong>Red Sox</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=yankees'"><div class="team-logo-placeholder">⚾</div><strong>Yankees</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=rays'"><div class="team-logo-placeholder">⚾</div><strong>Rays</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=bluejays'"><div class="team-logo-placeholder">🐦</div><strong>Blue Jays</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=whitesox'"><div class="team-logo-placeholder">⚾</div><strong>White Sox</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=guardians'"><div class="team-logo-placeholder">⚾</div><strong>Guardians</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=tigers'"><div class="team-logo-placeholder">🐅</div><strong>Tigers</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=royals'"><div class="team-logo-placeholder">👑</div><strong>Royals</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=twins'"><div class="team-logo-placeholder">⚾</div><strong>Twins</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=astros'"><div class="team-logo-placeholder">🚀</div><strong>Astros</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=angels'"><div class="team-logo-placeholder">😇</div><strong>Angels</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=athletics'"><div class="team-logo-placeholder">⚾</div><strong>Athletics</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=mariners'"><div class="team-logo-placeholder">⚓</div><strong>Mariners</strong></button>
+            <button class="team-option" onclick="location.href='info.html?team=rangers'"><div class="team-logo-placeholder">🤠</div><strong>Rangers</strong></button>
+        </div>
+        
+        <button class="button" onclick="location.href='ar.html'">📷 IR AL AR</button>
     </div>
-    <div class="arrow">›</div>
-</button>
-<button class="team-option" onclick="location.href='info.html'">
-    <div class="team-logo-placeholder">⚾</div>
-    <div class="team-option-text">
-        <strong>Detroit Tigers</strong>
-        <span>Detroit, Michigan</span>
-    </div>
-    <div class="arrow">›</div>
-</button>
-<button class="team-option" onclick="location.href='info.html'">
-    <div class="team-logo-placeholder">⚾</div>
-    <div class="team-option-text">
-        <strong>Kansas City Royals</strong>
-        <span>Kansas City, Missouri</span>
-    </div>
-    <div class="arrow">›</div>
-</button>
-<button class="team-option" onclick="location.href='info.html'">
-    <div class="team-logo-placeholder">⚾</div>
-    <div class="team-option-text">
-        <strong>Oakland Athletics</strong>
-        <span>Oakland, California</span>
-    </div>
-    <div class="arrow">›</div>
-</button>
-<button class="team-option" onclick="location.href='info.html'">
-    <div class="team-logo-placeholder">⚾</div>
-    <div class="team-option-text">
-        <strong>Seattle Mariners</strong>
-        <span>Seattle, Washington</span>
-    </div>
-    <div class="arrow">›</div>
-</button>
-<button class="team-option" onclick="location.href='info.html'">
-    <div class="team-logo-placeholder">⚾</div>
-    <div class="team-option-text">
-        <strong>Texas Rangers</strong>
-        <span>Arlington, Texas</span>
-    </div>
-    <div class="arrow">›</div>
-</button>
-<button class="team-option" onclick="location.href='info.html'">
-    <div class="team-logo-placeholder">⚾</div>
-    <div class="team-option-text">
-        <strong>Yankees</strong>
-        <span>El Bronx, New York</span>
-    </div>
-    <div class="arrow">›</div>
-</button>
-</div>
-<button class="button" onclick="location.href='ar.html'">📷 IR AL AR</button>
-</div>
 </body>
 </html>

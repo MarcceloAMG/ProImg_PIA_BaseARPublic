@@ -1,127 +1,88 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>BaseAR - Historia del Equipo</title>
-
-    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-
     <div class="phone team-history-page">
-
-        <!-- =========================
-             ENCABEZADO
-        ========================== -->
-
         <div class="info-header">
-
-            <button
-                class="back"
-                onclick="location.href='info.html'">
-                ‹
-            </button>
-
-            <h2>
-                🏆 Historia del Equipo
-            </h2>
-
+            <button class="back" id="btnBack">‹</button>
+            <h2>🏆 Historia del Equipo</h2>
         </div>
-
-        <!-- =========================
-             BANNER DEL EQUIPO
-        ========================== -->
 
         <div class="team-banner">
-
-            <div class="team-banner-logo">⚾</div>
-
+            <div class="team-banner-logo" id="bannerLogo">⚾</div>
             <div class="team-banner-info">
-                <h3>New York Baseball</h3>
-                <p>Fundado en 1903 • 12 títulos</p>
+                <h3 id="bannerTitle">Cargando...</h3>
+                <p id="bannerSub">...</p>
             </div>
-
         </div>
 
-        <!-- =========================
-             HISTORIA
-        ========================== -->
-
-        <div class="team-history-content">
-
-            <div class="history-section">
-
-                <h4>🏛️ Los inicios</h4>
-
-                <p>
-                    El equipo fue fundado en 1903 en Nueva York, convirtiéndose en uno de
-                    los equipos más antiguos de la liga. Su primer partido oficial se jugó
-                    en el antiguo Polo Grounds.
-                </p>
-
-            </div>
-
-            <div class="history-section">
-
-                <h4>🏆 Época dorada</h4>
-
-                <p>
-                    Entre 1920 y 1940, el equipo dominó la liga con 6 títulos de Serie Mundial.
-                    Leyendas como Babe Ruth y Lou Gehrig vistieron los colores del equipo.
-                </p>
-
-            </div>
-
-            <div class="history-section">
-
-                <h4>🌟 Era moderna</h4>
-
-                <p>
-                    En las últimas décadas, el equipo ha mantenido su tradición ganadora,
-                    sumando 6 títulos más y consolidándose como una de las franquicias
-                    más exitosas de la historia.
-                </p>
-
-            </div>
-
+        <div class="team-history-content" id="historySections">
+            <!-- Aquí se inyectará el HTML dinámicamente -->
         </div>
-
-        <!-- =========================
-             LOGROS
-        ========================== -->
 
         <div class="team-achievements">
-
             <h4>🏅 Logros destacados</h4>
-
-            <div class="achievement-grid">
-
-                <div class="achievement-item">
-                    <span class="achievement-number">12</span>
-                    <span class="achievement-label">Series Mundiales</span>
-                </div>
-
-                <div class="achievement-item">
-                    <span class="achievement-number">21</span>
-                    <span class="achievement-label">Títulos de División</span>
-                </div>
-
-                <div class="achievement-item">
-                    <span class="achievement-number">15</span>
-                    <span class="achievement-label">Jugadores en el Salón de la Fama</span>
-                </div>
-
+            <div class="achievement-grid" id="achievementsGrid">
+                <!-- Aquí se inyectarán los logros -->
             </div>
-
         </div>
-
     </div>
 
-</body>
+    <script src="js/teams-data.js"></script>
+    <script>
+        window.onload = function() {
+            if (typeof TEAMS_DATA === 'undefined') return alert("Falta teams-data.js");
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const teamId = urlParams.get('team') || 'yankees';
+            const data = TEAMS_DATA[teamId];
+
+            // Configurar botón de volver
+            document.getElementById('btnBack').onclick = () => location.href = `info.html?team=${teamId}`;
+
+            if (data && data.history) {
+                // Actualizar banner
+                document.getElementById('bannerLogo').innerText = data.logo || "⚾";
+                document.getElementById('bannerTitle').innerText = data.history.bannerTitle || data.name;
+                document.getElementById('bannerSub').innerText = data.history.bannerSub || "Historia del equipo";
+
+                // Inyectar secciones de historia
+                const sectionsContainer = document.getElementById('historySections');
+                sectionsContainer.innerHTML = ""; 
+                
+                if (data.history.sections && data.history.sections.length > 0) {
+                    data.history.sections.forEach(sec => {
+                        sectionsContainer.innerHTML += `
+                            <div class="history-section">
+                                <h4>${sec.title}</h4>
+                                <p>${sec.text}</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    sectionsContainer.innerHTML = "<p>Historia en construcción...</p>";
+                }
+
+                // Inyectar logros
+                const grid = document.getElementById('achievementsGrid');
+                grid.innerHTML = "";
+                if (data.history.achievements) {
+                    data.history.achievements.forEach(ach => {
+                        grid.innerHTML += `
+                            <div class="achievement-item">
+                                <span class="achievement-number">${ach.number}</span>
+                                <span class="achievement-label">${ach.label}</span>
+                            </div>
+                        `;
+                    });
+                }
+            }
+        };
+    </script>
+</body>
 </html>
