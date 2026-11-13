@@ -26,8 +26,8 @@
             </div>
         </div>
 
-        <div class="stats-chart">
-            <h3>📈 Rendimiento por mes</h3>
+                <div class="stats-chart">
+            <h3>📈 Rendimiento por mes (%)</h3> <!-- Agregado el (%) -->
             <div class="chart-bars" id="chartContainer">
                 <!-- Inyección de barras -->
             </div>
@@ -74,16 +74,19 @@
                     playersContainer.innerHTML = "<p style='font-size:12px;color:#8ca1ba;'>Datos de jugadores no disponibles.</p>";
                 }
 
-                // Gráfico
+                                // Gráfico
                 const chartContainer = document.getElementById('chartContainer');
                 chartContainer.innerHTML = "";
                 const meses = ["Abr", "May", "Jun", "Jul", "Ago", "Sep"];
                 if (data.stats.chart) {
                     data.stats.chart.forEach((val, index) => {
+                        // AQUÍ AÑADIMOS EL VALOR DENTRO DE LA BARRA
                         chartContainer.innerHTML += `
                             <div class="chart-bar">
-                                <div class="bar" style="height: ${val}%;"></div>
-                                <span>${meses[index]}</span>
+                                <div class="bar" style="height: ${val}%;">
+                                    <span class="bar-value">${val}%</span>
+                                </div>
+                                <span class="bar-month">${meses[index]}</span>
                             </div>
                         `;
                     });
@@ -91,5 +94,6 @@
             }
         };
     </script>
+    <script src="js/theme.js"></script>
 </body>
 </html>

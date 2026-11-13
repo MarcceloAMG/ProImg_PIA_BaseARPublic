@@ -10,7 +10,6 @@
 
     <div class="phone info">
         <div class="info-header">
-            <!-- Ahora vuelve a equipos.html -->
             <button class="back" onclick="location.href='equipos.html'">‹</button>
             <h2>Información</h2>
         </div>
@@ -33,7 +32,7 @@
                 <div class="arrow">›</div>
             </button>
 
-            <button class="info-option" onclick="location.href='video.html'">
+            <button class="info-option" id="btnVideo">
                 <div class="option-icon">🎥</div>
                 <div class="option-text">
                     <strong>Video</strong>
@@ -91,11 +90,9 @@
         <button class="button" onclick="location.href='ar.html'">📷 VOLVER AL AR</button>
     </div>
 
-     <!-- CARGAMOS LOS DATOS Y LA LÓGICA -->
     <script src="js/teams-data.js"></script>
     <script>
         window.onload = function() {
-            // 1. Verificamos si el archivo de datos cargó
             if (typeof TEAMS_DATA === 'undefined') {
                 document.getElementById('teamName').innerText = "Error de Datos";
                 document.getElementById('teamCity').innerText = "Revisa que js/teams-data.js exista";
@@ -103,21 +100,17 @@
                 return;
             }
 
-            // 2. Obtener el equipo de la URL (ej. info.html?team=yankees)
             const urlParams = new URLSearchParams(window.location.search);
             const teamId = urlParams.get('team') || 'yankees';
-
-            // 3. Buscar los datos
             const teamData = TEAMS_DATA[teamId];
 
-            // 4. Actualizar el HTML
             if (teamData) {
-                document.getElementById('teamLogo').innerText = teamData.logo || '⚾';
+                // AQUÍ ESTÁ EL CAMBIO: innerHTML en lugar de innerText
+                document.getElementById('teamLogo').innerHTML = teamData.logo || '⚾';
                 document.getElementById('teamName').innerText = teamData.name;
                 document.getElementById('teamCity').innerText = '📍 ' + teamData.city;
                 document.title = 'BaseAR - ' + teamData.name;
 
-                // 5. Activar los botones dinámicos
                 document.getElementById('btnTrivia').onclick = function() {
                     location.href = `trivia.html?team=${teamId}`;
                 };
@@ -127,11 +120,16 @@
                 document.getElementById('btnHistory').onclick = function() {
                     location.href = `historia-equipo.html?team=${teamId}`;
                 };
+                document.getElementById('btnVideo').onclick = function() {
+                    location.href = `video.html?team=${teamId}`;
+                };
             } else {
                 document.getElementById('teamName').innerText = "Equipo no encontrado";
                 document.getElementById('teamCity').innerText = "El ID " + teamId + " no existe.";
             }
         };
     </script>
+
+    <script src="js/theme.js"></script>
 </body>
 </html>

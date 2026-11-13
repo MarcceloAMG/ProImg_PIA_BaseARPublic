@@ -134,6 +134,13 @@
             </button>
         </div>
 
+
+        <!-- =========================
+             AVISO DE FOTO GUARDADA
+        ========================== -->
+
+        <div class="photo-toast" id="photoToast"></div>
+
     </div>
 
 
@@ -148,16 +155,107 @@
 
         // -------------------------------------------------
         // 1) CONFIGURACIÓN DE MINDAR
+        //
+        //    imageTargetSrc debe apuntar a un archivo .mind
+        //    compilado a partir de la(s) imagen(es) que quieres
+        //    reconocer (los logos de los equipos).
+        //
+        //    Genera ese archivo con el compilador oficial:
+        //    https://hiukim.github.io/mind-ar-js-doc/tools/compile
+        //
+        //    Sube el .mind resultante junto a este archivo y
+        //    reemplaza la ruta de abajo (por ejemplo "targets.mind").
         // -------------------------------------------------
+
+        // -------------------------------------------------
+        // DIVISIONES
+        //
+        //    Para que el reconocimiento sea rápido, los 15 logos se
+        //    dividieron en 3 archivos .mind de 5 imágenes cada uno.
+        //    equipos.html manda a esta página con ?division=este,
+        //    ?division=central u ?division=oeste, y aquí se carga
+        //    SOLO el .mind (y los modelos) de esa división.
+        //
+        //    El targetIndex es el orden en que está cada logo dentro
+        //    de su archivo .mind. Si recompilas, respeta este orden.
+        //
+        //    modelPath: ruta del .glb de ese equipo. Si lo dejas sin
+        //    poner, se muestra el modelo de respaldo (esfera + nombre).
+        // -------------------------------------------------
+
+        const DIVISIONES = {
+
+            este: {
+                nombre: "Liga Americana Este",
+                mind: "./assets/este.mind",
+                equipos: [
+                    { targetIndex: 0, nombre: "Orioles", modelPath: "./models/Orioles.glb", scale: 1.0 },
+                    { targetIndex: 1, nombre: "Red Sox", modelPath: "./models/Boston_Red_Sox.glb", scale: 1.0 },
+                    { targetIndex: 2, nombre: "Yankees", modelPath: "./models/bate_Yankees.glb", scale: 0.40 },
+                    { targetIndex: 3, nombre: "Rays" },
+                    { targetIndex: 4, nombre: "Blue Jays" }
+                ]
+            },
+
+            central: {
+                nombre: "Liga Americana Central",
+                mind: "./assets/central.mind",
+                equipos: [
+                    { targetIndex: 0, nombre: "White Sox" },
+                    { targetIndex: 1, nombre: "Guardians", modelPath: "./models/bate_Guardians.glb", scale: 0.40 },
+                    { targetIndex: 2, nombre: "Tigers", modelPath: "./models/Detroit_Tigers.glb", scale: 1.0 },
+                    { targetIndex: 3, nombre: "Royals", modelPath: "./models/bate_Royals.glb", scale: 0.40 },
+                    { targetIndex: 4, nombre: "Twins", modelPath: "./models/Twins.glb", scale: 1.0 }
+                ]
+            },
+
+            oeste: {
+                nombre: "Liga Americana Oeste",
+                mind: "./assets/oeste.mind",
+                equipos: [
+                    { targetIndex: 0, nombre: "Astros" },
+                    { targetIndex: 1, nombre: "Angels" },
+                    { targetIndex: 2, nombre: "Athletics" },
+                    { targetIndex: 3, nombre: "Mariners" },
+                    { targetIndex: 4, nombre: "Rangers", modelPath: "./models/TexasRangers.glb", scale: 1.0 }
+                ]
+            }
+
+        };
+
+        const claveDivision = (
+            new URLSearchParams(location.search).get("division") || ""
+        ).toLowerCase();
+
+        const division = DIVISIONES[claveDivision];
+
+        if (!division) {
+            // Sin división válida no sabemos qué .mind cargar:
+            // se regresa a la lista para elegir una.
+            location.replace("equipos.html");
+            throw new Error("Falta ?division=este|central|oeste en la URL");
+        }
 
         const container = document.querySelector("#ar-container");
 
         const mindarThree = new MindARThree({
             container: container,
-            imageTargetSrc: "./assets/targets.mind", // <-- reemplaza con tu archivo compilado
+            imageTargetSrc: division.mind, // .mind de la división elegida
             maxTrack: 1,
             uiScanning: false,
-            uiLoading: false
+            uiLoading: false,
+
+            // Por defecto MindAR espera 5 cuadros seguidos detectando
+            // bien el logo antes de "confirmarlo" (para evitar falsos
+            // positivos). Bajarlo a 1-2 hace que el modelo aparezca
+            // casi de inmediato. Si notas que parpadea o se confirma
+            // con cosas que no son tu logo, súbelo un poco (2-3).
+            warmupTolerance: 1,
+
+            // Cuadros seguidos sin detectar el logo antes de darlo
+            // por "perdido". Más alto = tolera más que tiembles la
+            // cámara sin que el modelo desaparezca.
+            missTolerance: 5
         });
 
         const { renderer, scene, camera } = mindarThree;
@@ -173,13 +271,38 @@
         scene.add(dirLight);
 
         // -------------------------------------------------
-        // 3) MODELOS AR POR TARGET
+        // 3) MODELO AR QUE SE MUESTRA SOBRE EL LOGO
+        //
+        //    Por defecto se genera un modelo simple (esfera +
+        //    etiqueta de texto) para que veas el flujo funcionando
+        //    sin depender de un archivo .glb externo.
+        //
+        //    Para usar tu propio modelo 3D (.glb/.gltf), importa
+        //    GLTFLoader y reemplaza este bloque, por ejemplo:
+        //
+        //    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+        //    const loader = new GLTFLoader();
+        //    loader.load("./models/equipo.glb", (gltf) => {
+        //        gltf.scene.scale.set(0.2, 0.2, 0.2);
+        //        modelGroup.add(gltf.scene);
+        //    });
+        //
+        //    Cuando compilas tu(s) logo(s) en
+        //    https://hiukim.github.io/mind-ar-js-doc/tools/compile
+        //    el orden en que subas las imágenes define su índice:
+        //    la 1ra imagen = targetIndex 0, la 2da = targetIndex 1, etc.
+        //
+        //    Aquí defines, por cada targetIndex, qué modelo .glb
+        //    cargar (o un modelo simple de respaldo si no pones
+        //    ninguna ruta). Agrega o quita objetos de este arreglo
+        //    según cuántas imágenes tenga tu targets.mind.
         // -------------------------------------------------
 
         import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
         const loader = new GLTFLoader();
 
-        // Referencias de la interfaz
+        // Referencias de la interfaz (se usan dentro de los eventos
+        // onTargetFound / onTargetLost de cada anchor, más abajo)
         const statusText = document.getElementById("status");
         const statusHint = document.getElementById("statusHint");
         const statusDot = document.getElementById("statusDot");
@@ -187,24 +310,19 @@
         const permissionOverlay = document.getElementById("permissionOverlay");
         const permissionText = document.getElementById("permissionText");
 
-        const configuracionTargets = [
-            {
-                targetIndex: 0,
-                nombre: "Bate",
-                modelPath: "./models/bate.glb",
-                scale: 0.15,
-                rotationY: 0,
-                yOffset: 0.05
-            },
-            {
-                targetIndex: 14,
-                nombre: "Bate_Yankees",
-                modelPath: "./models/bate_Yankees.glb",
-                scale: 0.40,
-                rotationY: 0,
-                yOffset: 0.05
-            }
-        ];
+        // Valores por defecto de cada modelo; cada equipo de DIVISIONES
+        // puede sobreescribirlos (scale, rotationY, yOffset, rotationSpeed).
+        const configuracionTargets = division.equipos.map((equipo) => ({
+            scale: 0.15,          // tamaño del modelo
+            rotationY: 0,         // gira el modelo si aparece de lado
+            yOffset: 0.05,        // súbelo/bájalo sobre el logo
+            rotationSpeed: 0.1,  // qué tan rápido gira (radianes por frame)
+            ...equipo
+        }));
+
+        // Muestra en pantalla qué división se está escaneando
+        instructions.querySelector("p").textContent =
+            division.nombre + " · coloca el logo dentro del encuadre";
 
         function crearEtiquetaTexto(texto, color = "#ffffff") {
 
@@ -267,16 +385,17 @@
         // Objetos que se animan (flotando) en cada frame
         const objetosAnimados = [];
 
-        // Modelos .glb cargados, para rotarlos sobre su propio eje Y.
-        // Guardamos también su rotación base para no perder el rotationY de config.
-        const modelosAnimados = [];
+        // Grupos de cada modelo AR, para poder rotarlos en cada frame
+        const gruposModelo = [];
 
         // Por cada target: crea su anchor y le carga su modelo
         configuracionTargets.forEach((config) => {
 
             const anchor = mindarThree.addAnchor(config.targetIndex);
             const modelGroup = new THREE.Group();
+            modelGroup.userData.rotationSpeed = config.rotationSpeed ?? 0.01;
             anchor.group.add(modelGroup);
+            gruposModelo.push(modelGroup);
 
             if (config.modelPath) {
 
@@ -292,19 +411,15 @@
                         modelo.position.y = config.yOffset ?? 0.05;
                         modelGroup.add(modelo);
 
-                        // Guardamos el modelo y su rotación base para animarlo
-                        // en el bucle de render (giro sobre su propio eje Y).
-                        modelosAnimados.push({
-                            modelo,
-                            rotBase: config.rotationY ?? 0
-                        });
-
                     },
 
                     undefined,
 
                     (error) => {
 
+                        // Si el .glb no carga (ruta incorrecta, archivo
+                        // faltante, etc.) se usa el modelo de respaldo
+                        // para que igual veas algo sobre el logo.
                         console.warn(
                             `No se pudo cargar ${config.modelPath}, usando modelo de respaldo.`,
                             error
@@ -385,21 +500,173 @@
         document.getElementById("confettiBtn")
             .addEventListener("click", lanzarConfeti);
 
+        // -------------------------------------------------
+        // GALERÍA: guarda la foto AR para que galeria.html
+        // la pueda leer y mostrar (usa localStorage, que es
+        // compartido entre páginas del mismo sitio).
+        // -------------------------------------------------
+
+        const CLAVE_GALERIA = "arPhotos";
+        const MAX_FOTOS_GUARDADAS = 12; // evita llenar el almacenamiento
+
+        function guardarFotoEnGaleria(dataUrl) {
+
+            try {
+
+                const fotos = JSON.parse(localStorage.getItem(CLAVE_GALERIA) || "[]");
+
+                fotos.unshift({
+                    src: dataUrl,
+                    fecha: new Date().toISOString(),
+                    titulo: "Foto AR"
+                });
+
+                while (fotos.length > MAX_FOTOS_GUARDADAS) {
+                    fotos.pop();
+                }
+
+                localStorage.setItem(CLAVE_GALERIA, JSON.stringify(fotos));
+                return true;
+
+            } catch (error) {
+
+                console.error("No se pudo guardar la foto en la galería:", error);
+                return false;
+
+            }
+
+        }
+
+        const photoToast = document.getElementById("photoToast");
+        let photoToastTimer = null;
+
+        function mostrarAvisoFoto(mensaje, esError = false) {
+
+            photoToast.textContent = mensaje;
+            photoToast.classList.toggle("error", esError);
+            photoToast.classList.add("show");
+
+            clearTimeout(photoToastTimer);
+            photoToastTimer = setTimeout(() => {
+                photoToast.classList.remove("show");
+            }, 2200);
+
+        }
+
+        // Dibuja el <video> de la cámara dentro del canvas destino,
+        // recortando como "cover" (igual que hace el CSS con la cámara
+        // en pantalla) para que no se vea deformado.
+        function dibujarVideoComoCover(ctx, video, destW, destH) {
+
+            const videoW = video.videoWidth;
+            const videoH = video.videoHeight;
+
+            if (!videoW || !videoH) return false;
+
+            const relacionVideo = videoW / videoH;
+            const relacionDestino = destW / destH;
+
+            let sx, sy, sw, sh;
+
+            if (relacionVideo > relacionDestino) {
+                sh = videoH;
+                sw = videoH * relacionDestino;
+                sx = (videoW - sw) / 2;
+                sy = 0;
+            } else {
+                sw = videoW;
+                sh = videoW / relacionDestino;
+                sx = 0;
+                sy = (videoH - sh) / 2;
+            }
+
+            ctx.drawImage(video, sx, sy, sw, sh, 0, 0, destW, destH);
+            return true;
+
+        }
+
+        // El confeti son <div> normales animados con CSS, no forman
+        // parte del canvas 3D, así que hay que "dibujarlos" a mano
+        // en la posición y color exactos en que están en ese instante.
+        function dibujarConfetiActivo(ctx, destW, destH) {
+
+            const phone = document.querySelector(".phone.ar");
+            const phoneRect = phone.getBoundingClientRect();
+            const piezas = phone.querySelectorAll(".confetti-piece");
+
+            piezas.forEach((pieza) => {
+
+                const rect = pieza.getBoundingClientRect();
+                const estilo = getComputedStyle(pieza);
+
+                const x = ((rect.left - phoneRect.left) / phoneRect.width) * destW;
+                const y = ((rect.top - phoneRect.top) / phoneRect.height) * destH;
+                const w = (rect.width / phoneRect.width) * destW;
+                const h = (rect.height / phoneRect.height) * destH;
+
+                let angulo = 0;
+
+                try {
+                    const matriz = new DOMMatrixReadOnly(estilo.transform);
+                    angulo = Math.atan2(matriz.b, matriz.a);
+                } catch (error) {
+                    angulo = 0;
+                }
+
+                ctx.save();
+                ctx.translate(x + w / 2, y + h / 2);
+                ctx.rotate(angulo);
+                ctx.fillStyle = estilo.backgroundColor || "#ffffff";
+                ctx.fillRect(-w / 2, -h / 2, w, h);
+                ctx.restore();
+
+            });
+
+        }
+
         document.getElementById("cameraBtn")
             .addEventListener("click", () => {
 
-                renderer.domElement.toBlob((blob) => {
+                // Fuerza un render justo antes de capturar: si no se
+                // hace esto, el navegador puede haber limpiado el
+                // buffer de WebGL y la captura sale en blanco.
+                renderer.render(scene, camera);
 
-                    if (!blob) return;
+                const modeloCanvas = renderer.domElement;
+                const video = container.querySelector("video");
 
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.download = "baseAR-foto.png";
-                    link.click();
-                    URL.revokeObjectURL(url);
+                const maxAncho = 480;
+                const escala = Math.min(1, maxAncho / modeloCanvas.width);
 
-                });
+                const temp = document.createElement("canvas");
+                temp.width = Math.round(modeloCanvas.width * escala);
+                temp.height = Math.round(modeloCanvas.height * escala);
+
+                const ctx = temp.getContext("2d");
+
+                // 1) Fondo: la imagen de la cámara en ese instante
+                const huboVideo = video &&
+                    dibujarVideoComoCover(ctx, video, temp.width, temp.height);
+
+                if (!huboVideo) {
+                    ctx.fillStyle = "#03101c";
+                    ctx.fillRect(0, 0, temp.width, temp.height);
+                }
+
+                // 2) Encima: el canvas 3D con el modelo (respeta su
+                //    transparencia, así solo se pinta donde hay modelo)
+                ctx.drawImage(modeloCanvas, 0, 0, temp.width, temp.height);
+
+                // 3) Encima: el confeti que esté cayendo en ese momento
+                dibujarConfetiActivo(ctx, temp.width, temp.height);
+
+                const dataUrl = temp.toDataURL("image/jpeg", 0.9);
+                const guardado = guardarFotoEnGaleria(dataUrl);
+
+                mostrarAvisoFoto(
+                    guardado ? "📸 Foto guardada en la galería" : "No se pudo guardar la foto",
+                    !guardado
+                );
 
             });
 
@@ -429,6 +696,11 @@
         let animando = false;
         let tiempo = 0;
 
+        // MindAR calcula el tamaño del <video> y del <canvas> por su
+        // cuenta (a veces deja franjas vacías si el aspect ratio de la
+        // cámara no coincide con el del contenedor). Esto los fuerza a
+        // cubrir siempre el 100% del contenedor, recortando lo que
+        // sobre — igual que object-fit: cover.
         function forzarVideoCompleto() {
 
             const video = container.querySelector("video");
@@ -471,22 +743,23 @@
 
                     renderer.setAnimationLoop(() => {
 
-                        // Solo avanzamos el tiempo si NO está pausado.
-                        // Así el giro se congela exactamente donde está,
-                        // y al reanudar continúa desde el mismo ángulo.
                         if (!pausado) {
+
                             tiempo += 0.02;
+
+                            // Gira cada modelo AR sobre su propio eje
+                            gruposModelo.forEach((grupo) => {
+                                grupo.rotation.y += grupo.userData.rotationSpeed;
+                            });
+
+                            // Anima cualquier modelo de respaldo activo
+                            // (los .glb propios se animan solos si traen
+                            // sus propias animaciones/clips)
+                            objetosAnimados.forEach((obj) => {
+                                if (obj.userData.animar) obj.userData.animar(tiempo);
+                            });
+
                         }
-
-                        // Anima cualquier modelo de respaldo activo
-                        objetosAnimados.forEach((obj) => {
-                            if (obj.userData.animar) obj.userData.animar(tiempo);
-                        });
-
-                        // Gira cada modelo .glb sobre su propio eje Y.
-                        modelosAnimados.forEach(({ modelo, rotBase }) => {
-                            modelo.rotation.y = rotBase + tiempo;
-                        });
 
                         renderer.render(scene, camera);
 
@@ -514,6 +787,9 @@
         document.getElementById("enableCameraBtn")
             .addEventListener("click", iniciarAR);
 
+        // MindAR recalcula el tamaño del video al rotar el celular o
+        // redimensionar la ventana, así que lo volvemos a forzar
+        // un instante después de que eso pase.
         window.addEventListener("resize", () => {
             setTimeout(forzarVideoCompleto, 300);
         });
@@ -521,14 +797,17 @@
             setTimeout(forzarVideoCompleto, 300);
         });
 
+        // Detener la cámara al salir de la vista, para no dejarla encendida
         window.addEventListener("beforeunload", () => {
             try { mindarThree.stop(); } catch (e) {}
         });
 
+        // Intentar arrancar automáticamente al cargar la página
         iniciarAR();
 
 
     </script>
+    <script src="js/theme.js"></script>
 
 </body>
 

@@ -42,16 +42,14 @@
             const teamId = urlParams.get('team') || 'yankees';
             const data = TEAMS_DATA[teamId];
 
-            // Configurar botón de volver
             document.getElementById('btnBack').onclick = () => location.href = `info.html?team=${teamId}`;
 
             if (data && data.history) {
-                // Actualizar banner
-                document.getElementById('bannerLogo').innerText = data.logo || "⚾";
+                // AQUÍ ESTÁ EL CAMBIO: innerHTML en lugar de innerText
+                document.getElementById('bannerLogo').innerHTML = data.logo || "⚾";
                 document.getElementById('bannerTitle').innerText = data.history.bannerTitle || data.name;
                 document.getElementById('bannerSub').innerText = data.history.bannerSub || "Historia del equipo";
 
-                // Inyectar secciones de historia
                 const sectionsContainer = document.getElementById('historySections');
                 sectionsContainer.innerHTML = ""; 
                 
@@ -68,7 +66,6 @@
                     sectionsContainer.innerHTML = "<p>Historia en construcción...</p>";
                 }
 
-                // Inyectar logros
                 const grid = document.getElementById('achievementsGrid');
                 grid.innerHTML = "";
                 if (data.history.achievements) {
@@ -84,5 +81,6 @@
             }
         };
     </script>
+    <script src="js/theme.js"></script>
 </body>
 </html>

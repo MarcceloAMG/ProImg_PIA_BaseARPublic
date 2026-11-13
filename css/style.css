@@ -1,12 +1,14 @@
 /* =========================================
    BASEAR - ESTILOS GENERALES
 ========================================= */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
+
 body {
     background: #050b14;
     color: white;
@@ -17,9 +19,11 @@ body {
     align-items: center;
 }
 
+
 /* =========================================
    CONTENEDOR PRINCIPAL / CELULAR
 ========================================= */
+
 .phone {
     width: 390px;
     height: 844px;
@@ -39,6 +43,7 @@ body {
     box-shadow:
         0 0 50px rgba(20, 100, 255, 0.20);
 }
+
 .phone-scroll {
     width: 390px;
     height: 844px;
@@ -55,9 +60,11 @@ body {
 .phone-scroll::-webkit-scrollbar {
     width: 4px;
 }
+
 .phone-scroll::-webkit-scrollbar-track {
     background: #0b1d34;
 }
+
 .phone-scroll::-webkit-scrollbar-thumb {
     background: #328cff;
     border-radius: 10px;
@@ -65,9 +72,11 @@ body {
 /* =========================================
    PÁGINA DE INICIO
 ========================================= */
+
 .home {
     text-align: center;
     padding: 50px 28px;
+
     background:
         radial-gradient(
             circle at 50% 30%,
@@ -81,36 +90,52 @@ body {
         );
 }
 
+
 /* Pelota */
+
 .ball {
     width: 145px;
     height: 145px;
+
     border-radius: 50%;
+
     background: #f4f4f4;
+
     margin: 70px auto 35px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     font-size: 65px;
+
     box-shadow:
         0 15px 35px rgba(0, 0, 0, 0.5);
 }
 
+
 /* Nombre de la aplicación */
+
 .app-name {
     font-size: 50px;
     font-weight: 900;
     letter-spacing: -2px;
 }
+
 .app-name span {
     color: #328cff;
 }
 
+
 /* Subtítulo */
+
 .subtitle {
     color: #8ca1ba;
+
     font-size: 13px;
+
     letter-spacing: 2px;
+
     margin-top: 10px;
 }
 
@@ -118,99 +143,73 @@ body {
 /* =========================================
    BOTONES
 ========================================= */
+
 button {
     cursor: pointer;
     transition: 0.2s;
 }
+
 button:hover {
     transform: translateY(-2px);
 }
 
+
 /* Botón principal */
+
 .start,
 .main-button {
     width: 100%;
+
     padding: 18px;
+
     margin-top: 75px;
+
     border: none;
     border-radius: 15px;
+
     color: white;
+
     font-size: 16px;
     font-weight: bold;
+
     background:
         linear-gradient(
             135deg,
             #1675ef,
             #315cff
         );
+
     box-shadow:
         0 10px 25px rgba(30, 100, 255, 0.3);
 }
 
+
 /* Botón secundario */
+
 .about,
 .secondary-button {
     width: 100%;
+
     padding: 16px;
+
     margin-top: 15px;
+
     border-radius: 15px;
+
     color: #9cafc5;
+
     background: transparent;
+
     border: 1px solid #29415e;
+
     font-size: 15px;
 }
 
-/* =========================================
-   BOTÓN AR - PÁGINA DE EQUIPOS
-========================================= */
-
-.ar-top-button {
-    width: 100%;
-    padding: 14px 18px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-
-    border: none;
-    border-radius: 14px;
-
-    background: linear-gradient(
-        135deg,
-        #1675ef,
-        #315cff
-    );
-
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 8px 20px rgba(30, 100, 255, 0.25);
-
-    transition: 0.2s;
-}
-
-.ar-top-button:hover {
-    background: linear-gradient(
-        135deg,
-        #328cff,
-        #416bff
-    );
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 10px 25px rgba(30, 100, 255, 0.35);
-}
-
-.ar-top-button:active {
-    transform: scale(0.98);
-}
 
 /* =========================================
    PÁGINA AR
 ========================================= */
+
 .ar {
     background:
         linear-gradient(
@@ -222,12 +221,15 @@ button:hover {
             #304b61,
             #07111d 70%
         );
+
     position: relative;
 }
+
 
 /* =========================================
    FEED DE CÁMARA / MINDAR (Three.js)
 ========================================= */
+
 .ar-container {
     position: absolute;
     inset: 0;
@@ -236,6 +238,7 @@ button:hover {
     z-index: 1;
     overflow: hidden;
 }
+
 .ar-container video,
 .ar-container canvas {
     position: absolute;
@@ -253,13 +256,16 @@ button:hover {
     transition: opacity 0.3s ease;
 }
 
+
 /* =========================================
    OVERLAY DE PERMISO DE CÁMARA
 ========================================= */
+
 .permission-overlay {
     position: absolute;
     inset: 0;
     z-index: 20;
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -267,14 +273,17 @@ button:hover {
     gap: 18px;
     text-align: center;
     padding: 40px;
+
     background: rgba(4, 10, 20, 0.9);
     backdrop-filter: blur(6px);
 }
+
 .permission-overlay p {
     color: #d2deeb;
     font-size: 14px;
     line-height: 1.5;
 }
+
 .permission-overlay button {
     padding: 12px 28px;
     border-radius: 30px;
@@ -285,13 +294,16 @@ button:hover {
     font-size: 14px;
     cursor: pointer;
 }
+
 .permission-overlay button:hover {
     background: rgba(54, 165, 255, 0.3);
 }
 
+
 /* =========================================
    CONFETI
 ========================================= */
+
 .confetti-piece {
     position: absolute;
     top: -20px;
@@ -315,92 +327,171 @@ button:hover {
     }
 }
 
+
+/* =========================================
+   AVISO DE FOTO GUARDADA (toast)
+========================================= */
+
+.photo-toast {
+    position: absolute;
+    left: 50%;
+    bottom: 280px;
+    z-index: 30;
+
+    transform: translate(-50%, 10px);
+    opacity: 0;
+    pointer-events: none;
+
+    padding: 10px 20px;
+    border-radius: 30px;
+
+    background: rgba(0, 20, 10, 0.85);
+    border: 1px solid rgba(0, 255, 136, 0.4);
+    color: #eafff5;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.photo-toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.photo-toast.error {
+    border-color: rgba(255, 90, 90, 0.5);
+    color: #ffe1e1;
+}
+
+
 /* Estado "pausado" del botón de pausa */
 .ar-btn.pause.is-paused {
     border-color: #ffb454;
 }
+
 .ar-btn.pause.is-paused .ar-label {
     color: #ffb454;
 }
 
+
 /* Header */
+
 .header {
     position: absolute;
+
     top: 25px;
     left: 20px;
     right: 20px;
+
     display: flex;
+
     justify-content: space-between;
     align-items: center;
+
     z-index: 5;
 }
 
+
 /* Botones circulares */
+
 .header button,
 .back {
     width: 42px;
     height: 42px;
+
     border-radius: 50%;
+
     background: rgba(0, 0, 0, 0.4);
+
     border: 1px solid #49617a;
+
     color: white;
+
     font-size: 20px;
 }
 
+
 /* Título */
+
 .title {
     font-weight: bold;
     font-size: 16px;
 }
 
+
 /* =========================================
    INSTRUCCIONES AR
 ========================================= */
+
 .instructions {
     position: absolute;
+
     top: 105px;
+
     width: 100%;
+
     text-align: center;
 }
+
 .instructions h2 {
     font-size: 20px;
 }
+
 .instructions p {
     color: #aebed0;
+
     margin-top: 8px;
+
     font-size: 13px;
+
     padding: 0 30px;
 }
+
 
 /* =========================================
    MARCO DE ESCANEO
 ========================================= */
+
 .scanner {
     width: 280px;
     height: 280px;
+
     position: absolute;
+
     top: 275px;
     left: 50%;
+
     transform: translateX(-50%);
 }
 
+
 /* Esquinas */
+
 .corner {
     position: absolute;
+
     width: 45px;
     height: 45px;
+
     border-color: #36a5ff;
+
     border-style: solid;
+
     filter:
         drop-shadow(
             0 0 5px #36a5ff
         );
 }
 
+
 /* Esquina superior izquierda */
+
 .tl {
     top: 0;
     left: 0;
+
     border-width:
         4px
         0
@@ -408,10 +499,13 @@ button:hover {
         4px;
 }
 
+
 /* Esquina superior derecha */
+
 .tr {
     top: 0;
     right: 0;
+
     border-width:
         4px
         4px
@@ -419,10 +513,13 @@ button:hover {
         0;
 }
 
+
 /* Esquina inferior izquierda */
+
 .bl {
     bottom: 0;
     left: 0;
+
     border-width:
         0
         0
@@ -430,316 +527,660 @@ button:hover {
         4px;
 }
 
+
 /* Esquina inferior derecha */
+
 .br {
     bottom: 0;
     right: 0;
+
     border-width:
         0
         4px
         4px
         0;
 }
+
 
 /* =========================================
    LÍNEA DE ESCANEO
 ========================================= */
+
 .line,
 .scan-line {
     position: absolute;
+
     left: 10px;
     right: 10px;
+
     height: 2px;
+
     background: #3ca8ff;
+
     box-shadow:
         0 0 15px #3ca8ff;
+
     animation:
         scan 2s infinite;
 }
 
+
 @keyframes scan {
+
     0%,
     100% {
         top: 10%;
     }
+
     50% {
         top: 90%;
     }
+
 }
+
 
 /* =========================================
    MODELO 3D / AR
 ========================================= */
+
 .model {
     display: none;
+
     position: absolute;
+
     top: 350px;
+
     width: 100%;
+
     text-align: center;
 }
+
 .model.show,
 .model.visible {
     display: block;
 }
 
+
 /* Modelo simulado */
+
 .model-icon,
 .model-ball {
     width: 140px;
     height: 140px;
+
     margin: auto;
+
     border-radius: 50%;
+
     background:
         linear-gradient(
             135deg,
             #ffffff,
             #cdd6df
         );
+
     display: flex;
+
     justify-content: center;
     align-items: center;
+
     font-size: 65px;
+
     box-shadow:
         0 0 35px #278dff;
+
     animation:
         floating 2s
         infinite
         ease-in-out;
 }
 
+
 @keyframes floating {
+
     0%,
     100% {
         transform:
             translateY(0);
     }
+
     50% {
         transform:
             translateY(-15px);
     }
+
 }
+
 
 .model h3,
 .model-name {
     margin-top: 15px;
+
     font-size: 20px;
     font-weight: bold;
 }
 
+
 .model p,
 .model-label {
     color: #43a8ff;
+
     font-size: 12px;
+
     margin-top: 5px;
 }
+
 
 /* =========================================
    ESTADO DE ESCANEO
 ========================================= */
+
 .status {
     position: absolute;
+
     bottom: 105px;
+
     width: 100%;
+
     text-align: center;
+
     color: #d2deeb;
 }
 
+
 /* Punto azul */
+
 .dot,
 .status-dot {
     display: inline-block;
+
     width: 9px;
     height: 9px;
+
     background: #39a5ff;
+
     border-radius: 50%;
+
     box-shadow:
         0 0 10px #39a5ff;
+
     margin-right: 6px;
 }
 
+
 .status p {
     color: #8fa5bd;
+
     font-size: 13px;
+
     margin-top: 8px;
 }
+
 
 /* =========================================
    BOTÓN DE DEMOSTRACIÓN AR
 ========================================= */
+
 .demo,
 .ar-button {
     position: absolute;
+
     bottom: 28px;
+
     left: 25px;
     right: 25px;
+
     width: calc(100% - 50px);
+
     padding: 16px;
+
     border-radius: 14px;
+
     border: 1px solid #294766;
+
     background:
         rgba(5, 15, 28, 0.9);
+
     color: white;
+
     font-size: 14px;
 }
+
 
 /* =========================================
    PÁGINA INFORMACIÓN
 ========================================= */
+
 .info {
     padding: 25px 20px;
+
     background: linear-gradient(
         160deg,
         #071525,
         #0b1d34
     );
+
     overflow: hidden;
 }
+
 
 /* =========================================
    ENCABEZADO
 ========================================= */
+
 .info-header {
     display: flex;
     align-items: center;
     gap: 15px;
+
     margin-bottom: 25px;
 }
+
 .info-header .back {
     width: 42px;
     height: 42px;
+
     flex-shrink: 0;
+
     border-radius: 50%;
+
     border: 1px solid #49617a;
+
     background: transparent;
+
     color: white;
+
     font-size: 22px;
 }
+
 .info-header h2 {
     font-size: 21px;
 }
 
+
 /* =========================================
    EQUIPO DETECTADO
 ========================================= */
+
 .team-header {
     display: flex;
     flex-direction: column;
+
     align-items: center;
+
     text-align: center;
+
     margin-bottom: 20px;
 }
 
+
 /* Logo del equipo */
+
 .team-header .team-logo {
     width: 120px;
     height: 120px;
+
     min-width: 120px;
+
     margin: 0 0 12px 0;
+
     border-radius: 50%;
+
     background: white;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     font-size: 55px;
+
     box-shadow:
         0 10px 30px rgba(0,0,0,.4);
 }
 
+
 /* Nombre */
+
 .team-data h1 {
     font-size: 27px;
+
     margin: 0;
 }
+
 .team-data p {
     color: #8da4be;
+
     font-size: 13px;
+
     margin-top: 5px;
 }
+
+
+/* =========================================
+   BOTÓN "ESCANEAR CON AR" (arriba de la lista)
+========================================= */
+
+.ar-top-button {
+    width: 100%;
+
+    margin-top: 5px;
+
+    padding: 15px;
+
+    border: none;
+    border-radius: 14px;
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1675ef,
+            #315cff
+        );
+
+    box-shadow:
+        0 10px 25px rgba(30, 100, 255, 0.3);
+}
+
+.ar-top-button:hover {
+    transform: translateY(-2px);
+}
+
+
+/* --- Fila con 3 botones pequeños: Este / Central / Oeste --- */
+
+.scan-label {
+    margin: 18px 0 8px;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    color: #8fa5bd;
+
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ar-scan-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.ar-scan-btn {
+    padding: 12px 6px;
+
+    border: none;
+    border-radius: 12px;
+
+    color: white;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1675ef,
+            #315cff
+        );
+
+    box-shadow:
+        0 6px 16px rgba(30, 100, 255, 0.3);
+}
+
+.ar-scan-btn:active {
+    transform: scale(0.96);
+}
+
+
+/* =========================================
+   LISTA DE EQUIPOS (equipos.html)
+========================================= */
+
+.teams-page {
+    overflow-y: auto;
+}
+
+/* Añadir esto justo debajo para arreglar el scroll */
+.teams-page::-webkit-scrollbar {
+    width: 4px;
+}
+.teams-page::-webkit-scrollbar-track {
+    background: #0b1d34;
+}
+.teams-page::-webkit-scrollbar-thumb {
+    background: #328cff;
+    border-radius: 10px;
+}
+
+.league-title {
+    margin: 22px 0 12px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    color: #8fa5bd;
+
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.teams-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding-bottom: 20px;
+}
+
+.team-option {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    text-align: left;
+
+    padding: 12px;
+
+    border-radius: 15px;
+
+    border: 1px solid #263f5b;
+
+    background: #0e2035;
+
+    color: white;
+
+    transition: .2s;
+
+    cursor: pointer;
+}
+
+.team-option:hover {
+    background: #142b46;
+
+    border-color: #328cff;
+
+    transform: translateY(-2px);
+}
+
+.team-logo-placeholder {
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+
+    border-radius: 12px;
+
+    background: #163250;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+
+    margin-right: 10px;
+}
+
+.team-option-text {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    flex: 1;
+}
+
+.team-option-text strong {
+    font-size: 14px;
+}
+
+.team-option-text span {
+    color: #8198b0;
+
+    font-size: 11px;
+
+    line-height: 1.2;
+}
+
 
 /* =========================================
    MENÚ
 ========================================= */
+
 .info-menu {
     display: grid;
+
     grid-template-columns: 1fr 1fr;
+
     gap: 10px;
+
     width: 100%;
 }
+
 
 /* =========================================
    BOTONES DE INFORMACIÓN
 ========================================= */
+
 .info-option {
     width: 100%;
+
     min-height: 75px;
+
     display: flex;
+
     align-items: center;
+
     text-align: left;
+
     padding: 12px;
+
     border-radius: 15px;
+
     border: 1px solid #263f5b;
+
     background: #0e2035;
+
     color: white;
+
     transition: .2s;
+
     cursor: pointer;
 }
 
+
 /* Últimos elementos ocupan todo el ancho */
+
 .info-option:nth-child(5),
 .info-option:nth-child(6),
 .info-option:nth-child(7) {
     grid-column: span 2;
 }
 
+
 /* Hover */
+
 .info-option:hover {
     background: #142b46;
+
     border-color: #328cff;
+
     transform: translateY(-2px);
 }
+
 
 /* =========================================
    ICONOS
 ========================================= */
+
 .option-icon {
     width: 42px;
     height: 42px;
+
     min-width: 42px;
+
     border-radius: 12px;
+
     background: #163250;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     font-size: 20px;
+
     margin-right: 10px;
 }
+
 
 /* =========================================
    TEXTO
 ========================================= */
+
 .option-text {
     display: flex;
+
     flex-direction: column;
+
     gap: 4px;
+
     flex: 1;
 }
+
 .option-text strong {
     font-size: 14px;
 }
+
 .option-text span {
     color: #8198b0;
+
     font-size: 11px;
+
     line-height: 1.2;
 }
+
 
 /* =========================================
    FLECHA
 ========================================= */
+
 .arrow {
     color: #6f8ba7;
+
     font-size: 24px;
+
     margin-left: 5px;
 }
+
 
 /* =========================================
    TRIVIA DESTACADA
@@ -747,6 +1188,7 @@ button:hover {
 
 .info-option.trivia {
     border-color: #287ee0;
+
     background:
         linear-gradient(
             135deg,
@@ -754,24 +1196,36 @@ button:hover {
             #0e2035
         );
 }
+
 .info-option.trivia .option-icon {
     background: #174d80;
 }
 
+
 /* =========================================
    BOTÓN VOLVER AL AR
 ========================================= */
+
 .info .button {
     width: 100%;
+
     margin-top: 20px;
+
     padding: 16px;
+
     border: none;
+
     border-radius: 14px;
+
     background: #1976f3;
+
     color: white;
+
     font-size: 14px;
+
     font-weight: bold;
 }
+
 .info .button:hover {
     background: #328cff;
 }
@@ -779,14 +1233,17 @@ button:hover {
 /* =========================================
    PÁGINA DE TRIVIA
 ========================================= */
+
 .trivia-page {
     padding: 25px 20px;
     background: linear-gradient(160deg, #071525, #0b1d34);
     overflow-y: auto;
 }
+
 .trivia-progress {
     margin: 20px 0 30px;
 }
+
 .question-counter {
     display: block;
     text-align: center;
@@ -794,6 +1251,7 @@ button:hover {
     font-size: 14px;
     margin-bottom: 10px;
 }
+
 .progress-bar {
     width: 100%;
     height: 6px;
@@ -801,34 +1259,40 @@ button:hover {
     border-radius: 10px;
     overflow: hidden;
 }
+
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, #1675ef, #315cff);
     border-radius: 10px;
     transition: width 0.3s;
 }
+
 .trivia-question {
     background: #0e2035;
     border-radius: 20px;
     padding: 30px 25px;
     border: 1px solid #263f5b;
 }
+
 .question-icon {
     font-size: 40px;
     text-align: center;
     margin-bottom: 15px;
 }
+
 .trivia-question h3 {
     font-size: 18px;
     text-align: center;
     margin-bottom: 25px;
     color: #fff;
 }
+
 .question-options {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
 }
+
 .option {
     padding: 14px;
     border-radius: 12px;
@@ -840,19 +1304,23 @@ button:hover {
     cursor: pointer;
     text-align: center;
 }
+
 .option:hover {
     background: #1a3a5a;
     border-color: #328cff;
 }
+
 .option.correct {
     border-color: #00b894;
     background: #1a4a3a;
     color: #55efc4;
 }
+
 .option.correct::after {
     content: " ✓";
     color: #55efc4;
 }
+
 .question-feedback {
     margin-top: 20px;
     padding: 15px;
@@ -860,11 +1328,13 @@ button:hover {
     text-align: center;
     font-size: 14px;
 }
+
 .correct-feedback {
     background: #1a4a3a;
     color: #55efc4;
     border: 1px solid #00b894;
 }
+
 .trivia-next {
     width: 100%;
     padding: 16px;
@@ -878,10 +1348,12 @@ button:hover {
     cursor: pointer;
     transition: 0.2s;
 }
+
 .trivia-next:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(30, 100, 255, 0.3);
 }
+
 
 /* =========================================
    PÁGINA DE VIDEO
@@ -901,47 +1373,55 @@ button:hover {
     margin: 20px 0;
 }
 
-.video-thumbnail {
+
+/* --- Reproductor real (reemplaza a .video-thumbnail) --- */
+
+.video-wrapper {
     position: relative;
     width: 100%;
-    height: 200px;
-    background: linear-gradient(135deg, #2d3436, #1a1a2e);
+    aspect-ratio: 16 / 9;
+    background: #000;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
+}
+
+.video-wrapper video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
     cursor: pointer;
-    transition: 0.2s;
+    transition: filter 0.3s;
 }
 
-.video-thumbnail:hover {
-    transform: scale(1.02);
-}
 
-.play-button {
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    color: white;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-}
+/* --- Capa de filtros AR sobre el video --- */
 
-.video-duration {
+.filter-overlay {
     position: absolute;
-    bottom: 12px;
-    right: 12px;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 12px;
-    color: white;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
 }
+
+.filter-overlay .tint {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.pixel-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    image-rendering: pixelated;
+}
+
+
+/* --- Información --- */
 
 .video-info {
     margin: 15px 0;
@@ -956,6 +1436,9 @@ button:hover {
     color: #8ca1ba;
     font-size: 13px;
 }
+
+
+/* --- Controles --- */
 
 .video-controls {
     display: flex;
@@ -987,20 +1470,23 @@ button:hover {
     font-size: 18px;
 }
 
+/* Barra de tiempo: se hizo un poco más alta y clicable */
 .timeline {
     flex: 1;
-    height: 4px;
+    height: 8px;
     background: #1a2f47;
     border-radius: 10px;
     position: relative;
     min-width: 100px;
+    cursor: pointer;
+    overflow: hidden;
 }
 
 .timeline-fill {
     height: 100%;
+    width: 0;
     background: linear-gradient(90deg, #1675ef, #315cff);
     border-radius: 10px;
-    transition: width 0.3s;
 }
 
 .time-display {
@@ -1008,6 +1494,9 @@ button:hover {
     font-size: 12px;
     min-width: 70px;
 }
+
+
+/* --- Filtros --- */
 
 .filters-section {
     margin-top: 20px;
@@ -1018,10 +1507,11 @@ button:hover {
     margin-bottom: 15px;
 }
 
+/* 4 columnas: Ninguno + 6 filtros (2 filas) */
 .filters-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 14px 8px;
 }
 
 .filter-item {
@@ -1030,11 +1520,12 @@ button:hover {
     align-items: center;
     text-align: center;
     gap: 6px;
+    cursor: pointer;
 }
 
 .filter-preview {
-    width: 55px;
-    height: 55px;
+    width: 52px;
+    height: 52px;
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -1048,6 +1539,18 @@ button:hover {
 .filter-preview:hover {
     transform: scale(1.05);
     border-color: #328cff;
+}
+
+/* Filtro seleccionado */
+.filter-item.active .filter-preview {
+    border-color: #328cff;
+    box-shadow: 0 0 14px rgba(50, 140, 255, 0.6);
+    transform: scale(1.08);
+}
+
+.filter-item.active span {
+    color: #fff;
+    font-weight: bold;
 }
 
 .filter-item span {
@@ -1174,189 +1677,58 @@ button:hover {
     margin-bottom: 20px;
 }
 
+/* =========================================
+   DISEÑO DE LAS BARRAS CON VALORES
+========================================= */
+
 .chart-bars {
     display: flex;
     justify-content: space-around;
-    align-items: flex-end;
+    align-items: stretch;
     height: 150px;
     gap: 12px;
+    margin-top: 25px; /* Un poco de espacio arriba para que respiren */
 }
 
 .chart-bar {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-end;
     flex: 1;
+    height: 100%;
 }
 
 .bar {
     width: 100%;
-    max-width: 30px;
+    max-width: 35px;
     background: linear-gradient(180deg, #328cff, #1675ef);
-    border-radius: 4px 4px 0 0;
+    border-radius: 6px 6px 0 0;
     transition: 0.3s;
-    min-height: 4px;
-}
-
-.chart-bar span {
-    font-size: 11px;
-    color: #8ca1ba;
-    margin-top: 6px;
-}
-
-
-/* =========================================
-   PÁGINA DE JUEGO (SNAKE)
-========================================= */
-
-.game-page {
-    padding: 25px 20px;
-    background: linear-gradient(160deg, #071525, #0b1d34);
-    overflow-y: auto;
-}
-
-.game-score {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin: 15px 0;
-}
-
-.score-display {
-    background: #0e2035;
-    border-radius: 15px;
-    padding: 14px;
-    text-align: center;
-    border: 1px solid #263f5b;
-}
-
-.score-label {
-    display: block;
-    font-size: 11px;
-    color: #8ca1ba;
-    text-transform: uppercase;
-}
-
-.score-value {
-    display: block;
-    font-size: 30px;
-    font-weight: bold;
-    color: #328cff;
-}
-
-.game-board {
-    background: #0a1a2a;
-    border-radius: 16px;
-    padding: 12px;
-    border: 2px solid #263f5b;
-    margin: 10px 0;
-}
-
-.snake-grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 3px;
-    aspect-ratio: 1;
-}
-
-.cell {
-    background: #0e2035;
-    border-radius: 4px;
-    aspect-ratio: 1;
+    min-height: 15px; /* Altura mínima para que quepa el texto si el valor es bajo */
+    
+    /* Flexbox para centrar el texto dentro de la barra */
     display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 14px;
+    align-items: flex-start; /* Lo alinea arriba */
 }
 
-.cell.empty {
-    background: #0e2035;
+/* El texto del valor (ej. 45%) */
+.bar-value {
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 4px; /* Separación del borde superior de la barra */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); /* Sombra para que se lea mejor */
 }
 
-.cell.snake-head {
-    background: linear-gradient(135deg, #328cff, #1675ef);
-    border-radius: 6px;
-    color: white;
+/* El texto del mes (ej. Abr) */
+.bar-month {
     font-size: 12px;
+    color: #8ca1ba;
+    margin-top: 8px;
+    font-weight: 500;
 }
-
-.cell.snake-body {
-    background: #1a4a7a;
-    border-radius: 4px;
-    font-size: 12px;
-}
-
-.cell.food {
-    background: #0e2035;
-    font-size: 18px;
-    animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-.game-controls {
-    margin: 15px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-}
-
-.control-row {
-    display: flex;
-    gap: 6px;
-}
-
-.game-controls .control-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 14px;
-    font-size: 20px;
-    background: #0e2035;
-    border: 1px solid #263f5b;
-    color: #d2deeb;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.game-controls .control-btn:hover {
-    background: #1a3a5a;
-    border-color: #328cff;
-    transform: translateY(-2px);
-}
-
-.game-controls .control-btn.restart {
-    width: auto;
-    padding: 0 25px;
-    height: 45px;
-    font-size: 14px;
-    background: #1675ef;
-    border: none;
-    color: white;
-}
-
-.game-controls .control-btn.restart:hover {
-    background: #328cff;
-}
-
-.game-prize {
-    background: linear-gradient(135deg, #1a3a2a, #0e2035);
-    border: 1px solid #00b894;
-    border-radius: 14px;
-    padding: 14px;
-    text-align: center;
-    margin-top: 10px;
-    color: #55efc4;
-    font-size: 13px;
-}
-
-.prize-icon {
-    margin-right: 8px;
-}
-
 
 /* =========================================
    PÁGINA DE HISTORIA DEL EQUIPO
@@ -1532,6 +1904,7 @@ button:hover {
 }
 
 .gallery-image {
+    position: relative;
     width: 100%;
     aspect-ratio: 1;
     display: flex;
@@ -1542,6 +1915,117 @@ button:hover {
 
 .gallery-icon {
     opacity: 0.8;
+}
+
+
+/* =========================================
+   FOTOS AR GUARDADAS DESDE ar.html
+========================================= */
+
+.ar-photo-image {
+    background-size: cover;
+    background-position: center;
+    background-color: #0e2035;
+}
+
+.gallery-item.ar-photo {
+    cursor: pointer;
+}
+
+.ar-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 16px;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+}
+
+.gallery-delete {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery-delete:hover {
+    background: rgba(220, 50, 50, 0.85);
+}
+
+
+/* =========================================
+   VISOR DE FOTO COMPLETA (lightbox)
+========================================= */
+
+.photo-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px 20px;
+
+    background: rgba(2, 6, 14, 0.94);
+    backdrop-filter: blur(4px);
+}
+
+.photo-viewer.show {
+    display: flex;
+}
+
+.photo-viewer img {
+    max-width: 100%;
+    max-height: 70vh;
+    /* object-fit: contain asegura que se vea la foto ENTERA,
+       sin recortarla, sin importar su proporción original */
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.photo-viewer-info {
+    text-align: center;
+    color: #d2deeb;
+}
+
+.photo-viewer-info h4 {
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.photo-viewer-close {
+    position: absolute;
+    top: 24px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-viewer-close:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .gallery-info {
@@ -1849,91 +2333,463 @@ button:hover {
     border-color: #54a0ff;
     box-shadow: 0 0 30px rgba(84, 160, 255, 0.3);
 }
-/* =========================================
-   EQUIPOS - CUADRADOS
-========================================= */
 
-.teams-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-
-    width: 100%;
-    margin-top: 10px;
-    padding-bottom: 10px;
+/* Espacio entre el botón de escaneo de cada división y su lista */
+.ar-top-button + .teams-list {
+    margin-top: 12px;
 }
 
-.team-option {
+/* =========================================
+   ACTUALIZACIONES PARA EL JUEGO SNAKE
+========================================= */
+
+/* Asegurar que el tablero quepa bien en pantalla */
+.game-board {
     width: 100%;
-    height: 105px;
+    max-width: 320px;
+    margin: 0 auto;
+}
 
-    padding: 8px 5px;
+.snake-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 2px; /* Espacio más pequeño entre celdas */
+    aspect-ratio: 1;
+    background: #0a1a2a;
+    padding: 6px;
+    border-radius: 12px;
+}
 
-    background: #0e2035 !important;
-    color: white !important;
+.cell {
+    background: #0e2035;
+    border-radius: 3px;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
 
-    border: 1px solid #263f5b !important;
-    border-radius: 14px;
+.cell.snake-head {
+    background: linear-gradient(135deg, #328cff, #1675ef);
+    border-radius: 5px;
+    font-size: 12px;
+    box-shadow: 0 0 10px #1675ef;
+}
 
+.cell.snake-body {
+    background: #1a4a7a;
+    border-radius: 3px;
+}
+
+/* El premio desbloqueable */
+.reward-gradient {
+    background: linear-gradient(135deg, #2b1055, #7597de) !important;
+    box-shadow: 0 0 50px rgba(117, 151, 222, 0.4) !important;
+    transition: background 1s ease, box-shadow 1s ease;
+}
+
+/* Ajuste al mensaje de premio */
+.game-prize {
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ajuste a los botones de control */
+.game-controls .control-btn {
+    user-select: none; /* Evita que se seleccione el texto al tocar rápido */
+}
+
+/* Ajuste del header para que no estorbe */
+.game-page .info-header {
+    margin-bottom: 10px;
+}
+
+/* =========================================
+   FONDOS DESBLOQUEABLES (NIVELES SNAKE)
+========================================= */
+
+/* Nivel 1: Neón (Morado/Azul) */
+body.reward-level-1 .phone,
+body.reward-level-1 .phone-scroll {
+    background: linear-gradient(135deg, #2b1055, #7597de) !important;
+    box-shadow: 0 0 50px rgba(117, 151, 222, 0.4) !important;
+    transition: background 1s ease, box-shadow 1s ease;
+}
+
+/* =========================================
+   NIVEL 2: FONDO VINO + SCROLL MORADO NEÓN
+========================================= */
+
+/* 1. Fondo vino sólido */
+body.reward-level-2 .phone,
+body.reward-level-2 .phone-scroll,
+body.reward-level-2 .info,
+body.reward-level-2 .teams-page,
+body.reward-level-2 .game-page,
+body.reward-level-2 .trivia-page,
+body.reward-level-2 .stats-page,
+body.reward-level-2 .video-page,
+body.reward-level-2 .gallery-page,
+body.reward-level-2 .team-history-page,
+body.reward-level-2 .history-page {
+    background: #4a0e1c !important; /* Color vino profundo */
+    border-color: #c400ff !important; /* Borde morado neón */
+    box-shadow: 0 0 40px rgba(196, 0, 255, 0.4) !important; /* Brillo morado exterior */
+}
+
+/* Excepción para la cámara AR (para que no se rompa) */
+body.reward-level-2 .ar {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 2. Textos blancos para que resalten en el fondo vino */
+body.reward-level-2 .info-header h2,
+body.reward-level-2 .league-title,
+body.reward-level-2 .scan-label,
+body.reward-level-2 .team-data h1,
+body.reward-level-2 .team-data p {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6); /* Sombra para mejor lectura */
+}
+
+/* Botón de "volver" con brillo morado */
+body.reward-level-2 .info-header .back {
+    border-color: #c400ff !important;
+    color: #c400ff !important;
+    background: rgba(196, 0, 255, 0.1) !important;
+}
+
+/* 3. Tarjetas interiores oscuras con un sutil tinte vino */
+body.reward-level-2 .team-option,
+body.reward-level-2 .info-option,
+body.reward-level-2 .score-display,
+body.reward-level-2 .game-board,
+body.reward-level-2 .stat-card,
+body.reward-level-2 .stats-players,
+body.reward-level-2 .stats-chart,
+body.reward-level-2 .trivia-question {
+    background: #14070c !important; /* Casi negro, pero con un toque vino */
+    border-color: #7a1044 !important; /* Borde vino intermedio */
+}
+
+/* 4. SCROLL MORADO NEÓN */
+body.reward-level-2 ::-webkit-scrollbar-thumb {
+    background: #c400ff !important; /* Morado neón brillante */
+    border-radius: 10px !important;
+}
+body.reward-level-2 ::-webkit-scrollbar-track {
+    background: #2b0411 !important; /* Riel vino muy oscuro */
+}
+/* Nivel 3: Dorado */
+body.reward-level-3 .phone,
+body.reward-level-3 .phone-scroll {
+    background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c) !important;
+    box-shadow: 0 0 50px rgba(191, 149, 63, 0.6) !important;
+    transition: background 1s ease, box-shadow 1s ease;
+}
+
+/* Ajuste para que la UI se lea bien sobre los fondos claros (Béisbol y Oro) */
+body.reward-level-2 .info-header h2,
+body.reward-level-3 .info-header h2 {
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* =========================================
+   OVERLAY DE NIVEL SUPERADO
+========================================= */
+.level-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    background: rgba(4, 10, 20, 0.85);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.level-card {
+    background: #0e2035;
+    border: 2px solid #328cff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: popIn 0.3s ease;
+}
+
+.level-card h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.level-card p {
+    color: #a0b8d0;
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+/* =========================================
+   CONTROLES DEL JUEGO SNAKE (BOTONES GRANDES)
+========================================= */
+
+.game-controls {
+    margin: 20px 0 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px; /* Espacio entre filas */
+}
+
+.control-row {
+    display: flex;
+    gap: 12px; /* Espacio entre botones */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Botones cuadrados grandes (80x80) para uso táctil */
+.game-controls .control-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    font-size: 32px; /* Flechas grandes */
+    background: #0e2035;
+    border: 2px solid #263f5b;
+    color: #d2deeb;
+    cursor: pointer;
+    transition: 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Evita selección de texto o zoom accidental en móviles */
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+/* Feedback al presionar */
+.game-controls .control-btn:active {
+    background: #1a3a5a;
+    border-color: #328cff;
+    transform: scale(0.92);
+}
+
+/* Botón de reiniciar (más ancho para el texto) */
+.game-controls .control-btn.restart {
+    width: 130px;
+    height: 80px;
+    font-size: 16px;
+    background: #1675ef;
+    border: none;
+    color: white;
+    font-weight: bold;
+}
+
+.game-controls .control-btn.restart:active {
+    background: #328cff;
+}
+
+
+/* =========================================
+   CORRECCIÓN DE INTERFAZ - JUEGO SNAKE
+========================================= */
+
+/* 1. Más aire arriba para que el header respire */
+.game-page {
+    padding: 30px 20px 25px;
+}
+
+/* 2. Header con separación adecuada y botón de volver visible */
+.game-page .info-header {
+    margin-bottom: 20px;
+}
+
+.game-page .info-header h2 {
+    font-size: 22px;
+}
+
+.game-page .info-header .back {
+    background: rgba(50, 140, 255, 0.15);
+    border: 1px solid #328cff;
+}
+
+/* 3. Tarjetas de nivel/progreso con gradiente sutil */
+.game-page .game-score {
+    margin: 0 0 20px;
+}
+
+.game-page .score-display {
+    background: linear-gradient(135deg, #0e2035 0%, #163250 100%);
+    border: 1px solid #263f5b;
+}
+
+/* 4. Botones de control GRANDES (80x80) */
+.game-controls {
+    margin: 20px 0 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.control-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-controls .control-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    font-size: 32px;
+    background: #0e2035;
+    border: 2px solid #263f5b;
+    color: #d2deeb;
+    cursor: pointer;
+    transition: 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.game-controls .control-btn:active {
+    background: #1a3a5a;
+    border-color: #328cff;
+    transform: scale(0.92);
+}
+
+.game-controls .control-btn.restart {
+    width: 130px;
+    height: 80px;
+    font-size: 16px;
+    background: #1675ef;
+    border: none;
+    color: white;
+    font-weight: bold;
+}
+
+.game-controls .control-btn.restart:active {
+    background: #328cff;
+}
+
+
+/* =========================================
+   TARJETAS DE NIVEL Y PROGRESO (SNAKE)
+========================================= */
+
+.game-score {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 0 0 20px 0; /* Espacio debajo de las tarjetas */
+}
+
+.score-display {
+    background: #0e2035; /* Fondo azul muy oscuro */
+    border-radius: 16px; /* Bordes redondeados */
+    padding: 16px 10px;
+    text-align: center;
+    border: 1px solid #263f5b; /* Borde sutil */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra ligera */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    text-align: center;
-
-    cursor: pointer;
-
-    box-shadow: none;
-
-    transition: all 0.2s ease;
 }
 
-.team-option:hover {
-    background: #142b46 !important;
-    border-color: #328cff !important;
-
-    transform: translateY(-3px);
-
-    box-shadow: 0 6px 15px rgba(50, 140, 255, 0.18);
+.score-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #8ca1ba; /* Gris azulado */
+    text-transform: uppercase;
+    letter-spacing: 1px; /* Letras más espaciadas */
+    margin-bottom: 4px; /* Separación del número */
 }
 
-/* Espacio reservado para el logo */
+.score-value {
+    display: block;
+    font-size: 34px; /* Número grande */
+    font-weight: bold;
+    color: #328cff; /* Azul brillante */
+    line-height: 1.1;
+}
+
+/* Ajuste específico para el texto "1 / 10" para que no se desborde */
+.score-value span {
+    font-size: 28px; 
+}
+
+/* =========================================
+   ESTILOS PARA LOS LOGOS DE IMAGEN
+========================================= */
+
+/* Ajusta la imagen dentro de los círculos blancos grandes (Info e Historia) */
+.team-logo img,
+.team-banner-logo img {
+    width: 75%; /* Ocupa el 75% del círculo */
+    height: 75%;
+    object-fit: contain; /* Evita que la imagen se estire o deforme */
+}
+
+/* Ajusta la imagen dentro de los recuadros pequeños de la lista de equipos */
+.team-logo-placeholder img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+/* Asegura que el fondo del círculo sea blanco para que resalten los logos */
+.team-logo,
+.team-banner-logo,
 .team-logo-placeholder {
-    width: 48px;
-    height: 48px;
+    background-color: #ffffff !important;
+}
 
-    margin-bottom: 7px;
+/* =========================================
+   CORRECCIÓN CRÍTICA PARA LAS IMÁGENES DE LOGOS
+========================================= */
 
-    border-radius: 12px;
-
-    background: #163250 !important;
-
+/* 1. Aseguramos que los contenedores de logos tengan límites estrictos */
+.team-logo,
+.team-banner-logo,
+.team-logo-placeholder {
+    position: relative;
+    overflow: hidden !important; /* Corta cualquier cosa que intente salirse */
     display: flex;
     align-items: center;
     justify-content: center;
-
-    font-size: 23px;
-
-    border: 1px solid #294766;
 }
 
-/* Nombre */
-.team-option strong {
+/* 2. Forzamos a que las imágenes se adapten al tamaño de su contenedor */
+.team-logo img,
+.team-banner-logo img,
+.team-logo-placeholder img,
+img.team-logo-img {
+    max-width: 80% !important;
+    max-height: 80% !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important; /* Evita que se deformen */
     display: block;
-
-    width: 100%;
-
-    color: white;
-
-    font-size: 10px;
-    line-height: 1.2;
-
-    text-align: center;
-}
-
-/* Quitamos elementos que ya no necesitamos */
-.team-option .arrow,
-.team-option-text span {
-    display: none;
 }

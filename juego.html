@@ -4,186 +4,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>BaseAR - Estadísticas</title>
-
-    <!-- CSS -->
+    <title>BaseAR - Snake Game</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <div class="phone stats-page">
-
-        <!-- =========================
-             ENCABEZADO
-        ========================== -->
-
+    <div class="phone game-page" id="gameContainer">
+        
+        <!-- ENCABEZADO -->
         <div class="info-header">
-
-            <button
-                class="back"
-                onclick="location.href='info.html'">
-                ‹
-            </button>
-
-            <h2>
-                Estadísticas
-            </h2>
-
+            <button class="back" onclick="location.href='info.html'">‹</button>
+            <h2>🎮 Snake AR</h2>
         </div>
 
-        <!-- =========================
-             RESUMEN DE TEMPORADA
-        ========================== -->
-
-        <div class="stats-summary">
-
-            <div class="stat-card">
-                <span class="stat-value">89</span>
-                <span class="stat-label">Victorias</span>
+        <!-- PUNTAJE / NIVELES -->
+        <div class="game-score">
+            <div class="score-display">
+                <span class="score-label">Nivel</span>
+                <span class="score-value" id="levelValue">1</span>
             </div>
-
-            <div class="stat-card">
-                <span class="stat-value">73</span>
-                <span class="stat-label">Derrotas</span>
+            <div class="score-display">
+                <span class="score-label">Progreso</span>
+                <span class="score-value"><span id="lengthValue">1</span> / <span id="targetValue">10</span></span>
             </div>
-
-            <div class="stat-card">
-                <span class="stat-value">.549</span>
-                <span class="stat-label">Porcentaje</span>
-            </div>
-
         </div>
 
-        <!-- =========================
-             ESTADÍSTICAS DE JUGADORES
-        ========================== -->
-
-        <div class="stats-players">
-
-            <h3>📊 Líderes del equipo</h3>
-
-            <div class="player-stat">
-
-                <div class="player-info">
-                    <span class="player-name">Mike Johnson</span>
-                    <span class="player-pos">LF</span>
-                </div>
-
-                <div class="player-numbers">
-                    <div class="player-number">
-                        <span class="num">.312</span>
-                        <span class="num-label">AVG</span>
-                    </div>
-                    <div class="player-number">
-                        <span class="num">28</span>
-                        <span class="num-label">HR</span>
-                    </div>
-                    <div class="player-number">
-                        <span class="num">95</span>
-                        <span class="num-label">RBI</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="player-stat">
-
-                <div class="player-info">
-                    <span class="player-name">David Rodríguez</span>
-                    <span class="player-pos">SS</span>
-                </div>
-
-                <div class="player-numbers">
-                    <div class="player-number">
-                        <span class="num">.298</span>
-                        <span class="num-label">AVG</span>
-                    </div>
-                    <div class="player-number">
-                        <span class="num">22</span>
-                        <span class="num-label">HR</span>
-                    </div>
-                    <div class="player-number">
-                        <span class="num">78</span>
-                        <span class="num-label">RBI</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="player-stat">
-
-                <div class="player-info">
-                    <span class="player-name">Tomás Martínez</span>
-                    <span class="player-pos">P</span>
-                </div>
-
-                <div class="player-numbers">
-                    <div class="player-number">
-                        <span class="num">2.89</span>
-                        <span class="num-label">ERA</span>
-                    </div>
-                    <div class="player-number">
-                        <span class="num">16</span>
-                        <span class="num-label">W</span>
-                    </div>
-                    <div class="player-number">
-                        <span class="num">215</span>
-                        <span class="num-label">K</span>
-                    </div>
-                </div>
-
-            </div>
-
+        <!-- TABLERO -->
+        <div class="game-board">
+            <div class="snake-grid" id="snakeGrid"></div>
         </div>
 
-        <!-- =========================
-             GRÁFICO SIMULADO
-        ========================== -->
-
-        <div class="stats-chart">
-
-            <h3>📈 Rendimiento por mes</h3>
-
-            <div class="chart-bars">
-
-                <div class="chart-bar">
-                    <div class="bar" style="height: 40%;"></div>
-                    <span>Abr</span>
-                </div>
-
-                <div class="chart-bar">
-                    <div class="bar" style="height: 60%;"></div>
-                    <span>May</span>
-                </div>
-
-                <div class="chart-bar">
-                    <div class="bar" style="height: 75%;"></div>
-                    <span>Jun</span>
-                </div>
-
-                <div class="chart-bar">
-                    <div class="bar" style="height: 55%;"></div>
-                    <span>Jul</span>
-                </div>
-
-                <div class="chart-bar">
-                    <div class="bar" style="height: 80%;"></div>
-                    <span>Ago</span>
-                </div>
-
-                <div class="chart-bar">
-                    <div class="bar" style="height: 90%;"></div>
-                    <span>Sep</span>
-                </div>
-
+        <!-- CONTROLES -->
+        <div class="game-controls">
+            <div class="control-row">
+                <button class="control-btn" onclick="changeDirection(0, -1)">⬆️</button>
             </div>
+            <div class="control-row">
+                <button class="control-btn" onclick="changeDirection(-1, 0)">⬅️</button>
+                <button class="control-btn restart" onclick="restartCurrentLevel()">Reiniciar</button>
+                <button class="control-btn" onclick="changeDirection(1, 0)">➡️</button>
+            </div>
+            <div class="control-row">
+                <button class="control-btn" onclick="changeDirection(0, 1)">⬇️</button>
+            </div>
+        </div>
 
+        <!-- OVERLAY DE NIVEL SUPERADO -->
+        <div class="level-overlay" id="levelOverlay" style="display: none;">
+            <div class="level-card">
+                <h2 id="overlayTitle">¡Nivel Superado!</h2>
+                <p id="overlayMessage">Has desbloqueado un nuevo fondo.</p>
+                <button class="start" id="btnNextLevel" onclick="nextLevelAction()" style="margin-top: 0;">Continuar</button>
+            </div>
         </div>
 
     </div>
 
-</body>
+    <!-- Script Global para el Fondo -->
+    <script src="js/theme.js"></script>
 
+        <script>
+        // Configuración de Niveles
+        const GRID_SIZE = 10;
+        const TOTAL_CELLS = GRID_SIZE * GRID_SIZE;
+        const GAME_SPEED = 150; 
+        
+        const LEVELS = {
+            1: { target: 10, reward: "Fondo Neón", cssClass: "reward-level-1" },
+            2: { target: 20, reward: "Fondo Béisbol", cssClass: "reward-level-2" },
+            3: { target: 40, reward: "Fondo Dorado", cssClass: "reward-level-3" }
+        };
+
+        let currentLevel = 1;
+        let snake = [];
+        let direction = { x: 0, y: 0 };
+        let nextDirection = { x: 0, y: 0 };
+        let food = { x: 0, y: 0 };
+        let gameInterval = null;
+        let isPlaying = false;
+        let isGameOver = false;
+
+        // Elementos del DOM
+        const gridElement = document.getElementById('snakeGrid');
+        const levelValue = document.getElementById('levelValue');
+        const lengthValue = document.getElementById('lengthValue');
+        const targetValue = document.getElementById('targetValue');
+        const levelOverlay = document.getElementById('levelOverlay');
+        const overlayTitle = document.getElementById('overlayTitle');
+        const overlayMessage = document.getElementById('overlayMessage');
+        const btnNextLevel = document.getElementById('btnNextLevel');
+        const gameContainer = document.getElementById('gameContainer');
+
+        function createGrid() {
+            gridElement.innerHTML = '';
+            for (let i = 0; i < TOTAL_CELLS; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.id = `cell-${i}`;
+                gridElement.appendChild(cell);
+            }
+        }
+
+        function draw() {
+            document.querySelectorAll('.cell').forEach(c => {
+                c.className = 'cell empty';
+                c.innerText = '';
+            });
+
+            // Dibujar comida
+            const foodIndex = food.y * GRID_SIZE + food.x;
+            const foodCell = document.getElementById(`cell-${foodIndex}`);
+            if (foodCell) {
+                foodCell.classList.add('food');
+                foodCell.innerText = '🍎';
+            }
+
+            // Dibujar serpiente
+            snake.forEach((segment, index) => {
+                const segIndex = segment.y * GRID_SIZE + segment.x;
+                const segCell = document.getElementById(`cell-${segIndex}`);
+                if (segCell) {
+                    if (index === 0) {
+                        segCell.classList.add('snake-head');
+                        segCell.innerText = '🐍';
+                    } else {
+                        segCell.classList.add('snake-body');
+                    }
+                }
+            });
+            
+            // Actualizar UI de progreso
+            lengthValue.innerText = snake.length;
+        }
+
+        function generateFood() {
+            let newFood;
+            let isOccupied = true;
+            if (snake.length >= TOTAL_CELLS - 1) return; 
+
+            while (isOccupied) {
+                newFood = {
+                    x: Math.floor(Math.random() * GRID_SIZE),
+                    y: Math.floor(Math.random() * GRID_SIZE)
+                };
+                isOccupied = snake.some(seg => seg.x === newFood.x && seg.y === newFood.y);
+            }
+            food = newFood;
+        }
+
+        function update() {
+            if (isGameOver || !isPlaying) return;
+
+            if (nextDirection.x !== 0 && direction.x === 0) direction = { ...nextDirection };
+            if (nextDirection.y !== 0 && direction.y === 0) direction = { ...nextDirection };
+
+            const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+
+            // Colisión con paredes
+            if (head.x < 0 || head.x >= GRID_SIZE || head.y < 0 || head.y >= GRID_SIZE) {
+                gameOver();
+                return;
+            }
+
+            // Colisión con el propio cuerpo
+            if (snake.some(seg => seg.x === head.x && seg.y === head.y)) {
+                gameOver();
+                return;
+            }
+
+            snake.unshift(head);
+
+            // Comer comida
+            if (head.x === food.x && head.y === food.y) {
+                generateFood();
+
+                // COMPROBAR VICTORIA DEL NIVEL
+                if (snake.length >= LEVELS[currentLevel].target) {
+                    winLevel();
+                }
+            } else {
+                snake.pop();
+            }
+
+            draw();
+        }
+
+        function changeDirection(dx, dy) {
+            if (!isPlaying || isGameOver) return;
+            if (snake.length > 1) {
+                if (dx !== 0 && direction.x === -dx) return;
+                if (dy !== 0 && direction.y === -dy) return;
+            }
+            nextDirection = { x: dx, y: dy };
+        }
+
+        function startLevel(level) {
+            clearInterval(gameInterval);
+            currentLevel = level;
+            
+            // Configurar UI según el nivel
+            levelValue.innerText = currentLevel;
+            targetValue.innerText = LEVELS[currentLevel].target;
+            
+            // Reiniciar serpiente en el centro
+            snake = [{ x: 5, y: 5 }]; 
+            direction = { x: 1, y: 0 }; 
+            nextDirection = { x: 1, y: 0 };
+            isGameOver = false;
+            isPlaying = true;
+            
+            levelOverlay.style.display = "none";
+
+            generateFood();
+            createGrid();
+            draw();
+
+            gameInterval = setInterval(update, GAME_SPEED);
+        }
+
+        // --- NUEVA FUNCIÓN PARA REINICIAR EL NIVEL ACTUAL ---
+        function restartCurrentLevel() {
+            // Si el jugador muere, reiniciamos EL MISMO nivel, no el 1
+            startLevel(currentLevel);
+        }
+
+        // Esta función se queda solo para cuando termine el Nivel 3 y quiera volver al inicio
+        function resetGame() {
+            startLevel(1);
+        }
+
+        function gameOver() {
+            clearInterval(gameInterval);
+            isPlaying = false;
+            isGameOver = true;
+            
+            // Efecto visual
+            gameContainer.style.transform = "translateX(5px)";
+            setTimeout(() => gameContainer.style.transform = "translateX(-5px)", 50);
+            setTimeout(() => gameContainer.style.transform = "translateX(0)", 100);
+        }
+
+        function winLevel() {
+            clearInterval(gameInterval);
+            isPlaying = false;
+            
+            const levelData = LEVELS[currentLevel];
+            
+            // Guardar progreso en localStorage
+            const savedLevel = parseInt(localStorage.getItem('snakeRewardLevel') || '0', 10);
+            if (currentLevel > savedLevel) {
+                localStorage.setItem('snakeRewardLevel', currentLevel);
+            }
+
+            if (currentLevel >= savedLevel) {
+                document.body.className = document.body.className.replace(/reward-level-\d/g, '').trim();
+                document.body.classList.add(levelData.cssClass);
+            }
+
+            // Mostrar Overlay
+            if (currentLevel < 3) {
+                overlayTitle.innerText = `¡Nivel ${currentLevel} Superado!`;
+                overlayMessage.innerText = `Has desbloqueado el ${levelData.reward}.`;
+                btnNextLevel.innerText = "Ir al Nivel " + (currentLevel + 1);
+                btnNextLevel.dataset.nextAction = "next";
+            } else {
+                overlayTitle.innerText = "¡Juego Completado!";
+                overlayMessage.innerText = "¡Increíble! Has desbloqueado el Fondo Dorado.";
+                btnNextLevel.innerText = "Jugar desde el Inicio";
+                btnNextLevel.dataset.nextAction = "reset";
+            }
+
+            levelOverlay.style.display = "flex";
+
+            // Confeti
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = ['#ff6b6b', '#feca57', '#4ecdc4', '#a29bfe', '#fff'][Math.floor(Math.random() * 5)];
+                confetti.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+                gameContainer.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        function nextLevelAction() {
+            const action = btnNextLevel.dataset.nextAction;
+            if (action === "next") {
+                startLevel(currentLevel + 1);
+            } else {
+                resetGame(); // Esto solo se usa si terminaste el nivel 3
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowUp': changeDirection(0, -1); break;
+                case 'ArrowDown': changeDirection(0, 1); break;
+                case 'ArrowLeft': changeDirection(-1, 0); break;
+                case 'ArrowRight': changeDirection(1, 0); break;
+            }
+        });
+
+        // Iniciar el juego por primera vez
+        startLevel(1);
+    </script>
+
+</body>
 </html>

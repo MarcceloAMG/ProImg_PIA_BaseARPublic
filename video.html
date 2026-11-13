@@ -1,118 +1,268 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>BaseAR - Video</title>
-
-    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <div class="phone video-page">
+<!-- Filtro "Cámara térmica": convierte la luz de cada pixel en un mapa de calor
+     (negro → morado → rojo → naranja → amarillo → blanco) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="thermal" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix"
+            values="0.33 0.59 0.11 0 0
+                    0.33 0.59 0.11 0 0
+                    0.33 0.59 0.11 0 0
+                    0    0    0    1 0"/>
+        <feComponentTransfer>
+            <feFuncR type="table" tableValues="0 0.12 0.78 1 1 1"/>
+            <feFuncG type="table" tableValues="0 0 0.08 0.55 0.9 1"/>
+            <feFuncB type="table" tableValues="0 0.35 0.24 0 0.2 1"/>
+        </feComponentTransfer>
+    </filter>
+</svg>
+<div class="phone video-page">
 
-        <!-- =========================
-             ENCABEZADO
-        ========================== -->
-
-        <div class="info-header">
-
-            <button
-                class="back"
-                onclick="location.href='info.html'">
-                ‹
-            </button>
-
-            <h2>
-                Video
-            </h2>
-
-        </div>
-
-        <!-- =========================
-             REPRODUCTOR DE VIDEO
-        ========================== -->
-
-        <div class="video-player">
-
-            <div class="video-thumbnail">
-                <div class="play-button">
-                    ▶
-                </div>
-                <span class="video-duration">3:45</span>
-            </div>
-
-            <div class="video-info">
-                <h3>Momento destacado del partido</h3>
-                <p>New York Baseball vs Los Angeles Stars - 2026</p>
-            </div>
-
-            <div class="video-controls">
-
-                <button class="control-btn">⏮</button>
-                <button class="control-btn play-pause">⏸</button>
-                <button class="control-btn">⏭</button>
-
-                <div class="timeline">
-                    <div class="timeline-fill" style="width: 35%;"></div>
-                </div>
-
-                <span class="time-display">1:32 / 3:45</span>
-
-            </div>
-
-        </div>
-
-        <!-- =========================
-             FILTROS AR
-        ========================== -->
-
-        <div class="filters-section">
-
-            <h3>
-                🎭 Filtros AR disponibles
-            </h3>
-
-            <div class="filters-grid">
-
-                <div class="filter-item">
-                    <div class="filter-preview" style="background: #ff6b6b;">
-                        <span>⚾</span>
-                    </div>
-                    <span>Clásico</span>
-                </div>
-
-                <div class="filter-item">
-                    <div class="filter-preview" style="background: #4ecdc4;">
-                        <span>⭐</span>
-                    </div>
-                    <span>Estrella</span>
-                </div>
-
-                <div class="filter-item">
-                    <div class="filter-preview" style="background: #45b7d1;">
-                        <span>🔥</span>
-                    </div>
-                    <span>Fuego</span>
-                </div>
-
-                <div class="filter-item">
-                    <div class="filter-preview" style="background: #f9ca24;">
-                        <span>🌈</span>
-                    </div>
-                    <span>Arcoíris</span>
-                </div>
-
-            </div>
-
-        </div>
-
+    <div class="info-header">
+        <button class="back" id="btnBack">‹</button>
+        <h2>Video</h2>
     </div>
 
-</body>
+    <div class="video-player">
 
+        <div class="video-wrapper">
+            <video id="player" playsinline preload="metadata"></video>
+            <div class="filter-overlay" id="overlay">
+                <canvas id="pixelCanvas" class="pixel-canvas"></canvas>
+                <div class="tint" id="tint"></div>
+            </div>
+        </div>
+
+        <div class="video-info">
+            <h3 id="videoTitle">Momento destacado</h3>
+            <p id="videoSub">Cargando...</p>
+        </div>
+
+        <div class="video-controls">
+            <button class="control-btn" id="btnBack10">⏮</button>
+            <button class="control-btn play-pause" id="btnPlay">▶</button>
+            <button class="control-btn" id="btnFwd10">⏭</button>
+
+            <div class="timeline" id="timeline">
+                <div class="timeline-fill" id="timelineFill"></div>
+            </div>
+
+            <span class="time-display" id="timeDisplay">0:00 / 0:00</span>
+        </div>
+    </div>
+
+    <div class="filters-section">
+        <h3>🎭 Filtros AR disponibles</h3>
+
+        <div class="filters-grid">
+            <div class="filter-item active" data-filter="none">
+                <div class="filter-preview" style="background:#999;"><span>🚫</span></div>
+                <span>Ninguno</span>
+            </div>
+            <div class="filter-item" data-filter="blur">
+                <div class="filter-preview" style="background:#8fb8de;"><span>🌫️</span></div>
+                <span>Desenfoque</span>
+            </div>
+            <div class="filter-item" data-filter="pixel">
+                <div class="filter-preview" style="background:#4ecdc4;"><span>🔲</span></div>
+                <span>Pixelado</span>
+            </div>
+            <div class="filter-item" data-filter="thermal">
+                <div class="filter-preview" style="background:linear-gradient(135deg,#3a0ca3,#e63946,#ffd60a);"><span>🌡️</span></div>
+                <span>Térmica</span>
+            </div>
+            <div class="filter-item" data-filter="color">
+                <div class="filter-preview" style="background:#7b5cff;"><span>🎨</span></div>
+                <span>Color</span>
+            </div>
+            <div class="filter-item" data-filter="pastel">
+                <div class="filter-preview" style="background:#ffc8dd;"><span>🌸</span></div>
+                <span>Pastel</span>
+            </div>
+            <div class="filter-item" data-filter="saturado">
+                <div class="filter-preview" style="background:#ff2e63;"><span>🌈</span></div>
+                <span>Saturado</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="js/teams-data.js"></script>
+<script>
+    // ---------- Videos disponibles (cada archivo se declara UNA sola vez) ----------
+    const VIDEOS = {
+        orioles_giants:    { file: 'videos/Orioles_vs_Giants.mp4',     title: 'Orioles vs Giants' },
+        redsox_yankees:    { file: 'videos/Red_Sox_vs_Yankees.mp4',    title: 'Red Sox vs Yankees' },
+        rays_guardians:    { file: 'videos/Bay_Rays_vs_Guardians.mp4', title: 'Rays vs Guardians' },
+        bluejays_mariners: { file: 'videos/Blue_Jays_vs_Mariners.mp4', title: 'Blue Jays vs Mariners' },
+        royals_tigers:     { file: 'videos/Royals_vs_Tigers.mp4',      title: 'Royals vs Tigers' },
+        twins_rangers:     { file: 'videos/Twins_vs_Rangers.mp4',      title: 'Twins vs Rangers' },
+        whitesox_astros:   { file: 'videos/WHITE_SOX_VS_ASTROS.mp4',   title: 'White Sox vs Astros' },
+        athletics_angels:  { file: 'videos/Athletics_vs_Angels.mp4',   title: 'Athletics vs Angels' }
+    };
+
+    // ---------- Qué video usa cada equipo (varios equipos pueden compartir uno) ----------
+    const TEAM_VIDEO = {
+        orioles:   'orioles_giants',
+        redsox:    'redsox_yankees',
+        yankees:   'redsox_yankees',
+        rays:      'rays_guardians',
+        guardians: 'rays_guardians',
+        bluejays:  'bluejays_mariners',
+        mariners:  'bluejays_mariners',
+        royals:    'royals_tigers',
+        tigers:    'royals_tigers',
+        twins:     'twins_rangers',
+        rangers:   'twins_rangers',
+        whitesox:  'whitesox_astros',
+        astros:    'whitesox_astros',
+        athletics: 'athletics_angels',
+        angels:    'athletics_angels'
+    };
+
+    // ---------- Equipo desde la URL ----------
+    const teamId = new URLSearchParams(location.search).get('team') || 'yankees';
+    const team = (typeof TEAMS_DATA !== 'undefined') ? TEAMS_DATA[teamId] : null;
+    const clip = VIDEOS[TEAM_VIDEO[teamId]];
+
+    const video = document.getElementById('player');
+
+    if (clip) {
+        video.src = clip.file;
+        document.getElementById('videoTitle').innerText = clip.title;
+        document.getElementById('videoSub').innerText =
+            'Momento destacado' + (team ? ' · ' + team.name : '');
+    } else {
+        document.getElementById('videoTitle').innerText = 'Video no disponible';
+        document.getElementById('videoSub').innerText =
+            'No hay video asignado al equipo "' + teamId + '"';
+    }
+
+    document.getElementById('btnBack').onclick = () => location.href = `info.html?team=${teamId}`;
+
+    // ---------- Controles ----------
+    const btnPlay = document.getElementById('btnPlay');
+    const fill = document.getElementById('timelineFill');
+    const timeDisplay = document.getElementById('timeDisplay');
+
+    const fmt = s => {
+        if (isNaN(s)) return '0:00';
+        const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+        return `${m}:${sec.toString().padStart(2, '0')}`;
+    };
+
+    btnPlay.onclick = () => video.paused ? video.play() : video.pause();
+    video.addEventListener('click', () => btnPlay.click());
+    video.addEventListener('play',  () => btnPlay.innerText = '⏸');
+    video.addEventListener('pause', () => btnPlay.innerText = '▶');
+    video.addEventListener('ended', () => btnPlay.innerText = '▶');
+
+    document.getElementById('btnBack10').onclick = () => video.currentTime = Math.max(0, video.currentTime - 10);
+    document.getElementById('btnFwd10').onclick  = () => video.currentTime = Math.min(video.duration, video.currentTime + 10);
+
+    video.addEventListener('timeupdate', () => {
+        fill.style.width = (video.currentTime / video.duration * 100 || 0) + '%';
+        timeDisplay.innerText = `${fmt(video.currentTime)} / ${fmt(video.duration)}`;
+    });
+    video.addEventListener('loadedmetadata', () => {
+        timeDisplay.innerText = `0:00 / ${fmt(video.duration)}`;
+    });
+
+    document.getElementById('timeline').addEventListener('click', e => {
+        const r = e.currentTarget.getBoundingClientRect();
+        video.currentTime = ((e.clientX - r.left) / r.width) * video.duration;
+    });
+
+    video.addEventListener('error', () => {
+        if (!clip) return;
+        document.getElementById('videoSub').innerText = '⚠️ No se encontró el archivo: ' + clip.file;
+    });
+
+    // ---------- Filtros ----------
+    const tint = document.getElementById('tint');
+    const pixelCanvas = document.getElementById('pixelCanvas');
+    const pctx = pixelCanvas.getContext('2d');
+    const wrapper = video.parentElement;
+
+    const FILTERS = {
+        none:     { css: 'none' },
+        // Desenfoque: se amplía un poco el video para que los bordes no se vean negros
+        blur:     { css: 'blur(5px)', scale: 1.06 },
+        // Pixelado: se dibuja en un canvas (ver drawPixels)
+        pixel:    { pixel: true },
+        // Cámara térmica: filtro SVG #thermal definido arriba
+        thermal:  { css: 'url(#thermal)' },
+        // Ajuste de color: cambio de tono + un poco más de color
+        color:    { css: 'hue-rotate(40deg) saturate(1.3)' },
+        // Personalizado 1: colores pasteles y suavizados
+        pastel:   { css: 'saturate(1.05) contrast(.85)', tint: 'linear-gradient(135deg, rgba(255,190,225,.30), rgba(190,215,255,.30))' },
+        // Personalizado 2: alta saturación
+        saturado: { css: 'saturate(2.2) contrast(1.1)' }
+    };
+
+    // --- Pixelado ---
+    const PIXEL_SIZE = 12;          // tamaño de cada "pixel" en pantalla (más grande = más pixelado)
+    let pixelOn = false;
+    let pixelRAF = null;
+
+    pctx.imageSmoothingEnabled = true;
+    pctx.imageSmoothingQuality = 'high';
+
+    function drawPixels() {
+        if (!pixelOn) return;
+        const W = wrapper.clientWidth, H = wrapper.clientHeight;
+        const cw = Math.max(1, Math.round(W / PIXEL_SIZE));
+        const ch = Math.max(1, Math.round(H / PIXEL_SIZE));
+        if (pixelCanvas.width !== cw || pixelCanvas.height !== ch) {
+            pixelCanvas.width = cw;
+            pixelCanvas.height = ch;
+        }
+        const vw = video.videoWidth, vh = video.videoHeight;
+        if (vw && vh) {
+            // Recorte equivalente a object-fit: cover
+            const k = Math.max(W / vw, H / vh);
+            const sw = W / k, sh = H / k;
+            pctx.drawImage(video, (vw - sw) / 2, (vh - sh) / 2, sw, sh, 0, 0, cw, ch);
+        }
+        pixelRAF = requestAnimationFrame(drawPixels);
+    }
+
+    function setPixel(on) {
+        pixelOn = on;
+        cancelAnimationFrame(pixelRAF);
+        pixelCanvas.style.display = on ? 'block' : 'none';
+        if (on) drawPixels();
+    }
+
+    // --- Aplicar filtro ---
+    function applyFilter(name) {
+        const f = FILTERS[name];
+
+        video.style.filter = f.css || 'none';
+        video.style.transform = f.scale ? `scale(${f.scale})` : '';
+
+        tint.style.background = f.tint || 'transparent';
+        tint.style.opacity = f.tint ? 1 : 0;
+
+        setPixel(!!f.pixel);
+
+        document.querySelectorAll('.filter-item').forEach(i =>
+            i.classList.toggle('active', i.dataset.filter === name));
+    }
+
+    document.querySelectorAll('.filter-item').forEach(item =>
+        item.addEventListener('click', () => applyFilter(item.dataset.filter)));
+</script>
+<script src="js/theme.js"></script>
+</body>
 </html>
