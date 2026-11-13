@@ -2543,154 +2543,84 @@ body.reward-level-3 .info-header h2 {
     0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
+
 /* =========================================
-   CONTROLES DEL JUEGO SNAKE (BOTONES GRANDES)
+   CONTROLES DEL JUEGO SNAKE (CRUZ PERFECTA)
 ========================================= */
 
 .game-controls {
-    margin: 20px 0 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px; /* Espacio entre filas */
+    position: relative;
+    width: 140px; 
+    height: 140px; 
+    margin: 30px auto 20px; /* Margen superior para separarlo del tablero */
 }
 
-.control-row {
-    display: flex;
-    gap: 12px; /* Espacio entre botones */
-    justify-content: center;
-    align-items: center;
-}
-
-/* Botones cuadrados grandes (80x80) para uso táctil */
+/* Estilo base para todos los botones del juego */
 .game-controls .control-btn {
-    width: 80px;
-    height: 80px;
-    border-radius: 20px;
-    font-size: 32px; /* Flechas grandes */
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    font-size: 20px;
     background: #0e2035;
     border: 2px solid #263f5b;
     color: #d2deeb;
     cursor: pointer;
-    transition: 0.1s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Evita selección de texto o zoom accidental en móviles */
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-}
-
-/* Feedback al presionar */
-.game-controls .control-btn:active {
-    background: #1a3a5a;
-    border-color: #328cff;
-    transform: scale(0.92);
-}
-
-/* Botón de reiniciar (más ancho para el texto) */
-.game-controls .control-btn.restart {
-    width: 130px;
-    height: 80px;
-    font-size: 16px;
-    background: #1675ef;
-    border: none;
-    color: white;
-    font-weight: bold;
-}
-
-.game-controls .control-btn.restart:active {
-    background: #328cff;
-}
-
-
-/* =========================================
-   CORRECCIÓN DE INTERFAZ - JUEGO SNAKE
-========================================= */
-
-/* 1. Más aire arriba para que el header respire */
-.game-page {
-    padding: 30px 20px 25px;
-}
-
-/* 2. Header con separación adecuada y botón de volver visible */
-.game-page .info-header {
-    margin-bottom: 20px;
-}
-
-.game-page .info-header h2 {
-    font-size: 22px;
-}
-
-.game-page .info-header .back {
-    background: rgba(50, 140, 255, 0.15);
-    border: 1px solid #328cff;
-}
-
-/* 3. Tarjetas de nivel/progreso con gradiente sutil */
-.game-page .game-score {
-    margin: 0 0 20px;
-}
-
-.game-page .score-display {
-    background: linear-gradient(135deg, #0e2035 0%, #163250 100%);
-    border: 1px solid #263f5b;
-}
-
-/* 4. Botones de control GRANDES (80x80) */
-.game-controls {
-    margin: 20px 0 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-}
-
-.control-row {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    align-items: center;
-}
-
-.game-controls .control-btn {
-    width: 80px;
-    height: 80px;
-    border-radius: 20px;
-    font-size: 32px;
-    background: #0e2035;
-    border: 2px solid #263f5b;
-    color: #d2deeb;
-    cursor: pointer;
-    transition: 0.1s;
     display: flex;
     align-items: center;
     justify-content: center;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+    padding: 0;
+    transition: 0.1s;
 }
 
 .game-controls .control-btn:active {
     background: #1a3a5a;
     border-color: #328cff;
-    transform: scale(0.92);
+    transform: scale(0.9);
 }
 
-.game-controls .control-btn.restart {
-    width: 130px;
-    height: 80px;
-    font-size: 16px;
-    background: #1675ef;
+/* Posicionamiento exacto en cruz */
+.game-controls .btn-up { 
+    top: 0; 
+    left: 50%; 
+    transform: translateX(-50%); 
+}
+.game-controls .btn-down { 
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(-50%); 
+}
+.game-controls .btn-left { 
+    left: 0; 
+    top: 50%; 
+    transform: translateY(-50%); 
+}
+.game-controls .btn-right { 
+    right: 0; 
+    top: 50%; 
+    transform: translateY(-50%); 
+}
+
+/* Botón de Reiniciar (Arriba a la derecha) */
+.game-controls .restart { 
+    top: 0; 
+    right: -65px; /* Lo separa a la derecha de la flecha superior */
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1675ef, #315cff);
     border: none;
     color: white;
+    font-size: 24px;
     font-weight: bold;
+    box-shadow: 0 4px 10px rgba(22, 117, 239, 0.4);
 }
 
-.game-controls .control-btn.restart:active {
-    background: #328cff;
-}
+/* Efecto hover corregido */
+.game-controls .btn-up:hover, .game-controls .btn-down:hover { transform: translateX(-50%) scale(1.05); }
+.game-controls .btn-left:hover, .game-controls .btn-right:hover { transform: translateY(-50%) scale(1.05); }
+.game-controls .restart:hover { transform: scale(1.05); }
 
 
 /* =========================================

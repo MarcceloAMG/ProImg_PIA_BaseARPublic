@@ -34,21 +34,17 @@
         <div class="game-board">
             <div class="snake-grid" id="snakeGrid"></div>
         </div>
-
-        <!-- CONTROLES -->
+                <!-- CONTROLES -->
         <div class="game-controls">
-            <div class="control-row">
-                <button class="control-btn" onclick="changeDirection(0, -1)">⬆️</button>
-            </div>
-            <div class="control-row">
-                <button class="control-btn" onclick="changeDirection(-1, 0)">⬅️</button>
-                <button class="control-btn restart" onclick="restartCurrentLevel()">Reiniciar</button>
-                <button class="control-btn" onclick="changeDirection(1, 0)">➡️</button>
-            </div>
-            <div class="control-row">
-                <button class="control-btn" onclick="changeDirection(0, 1)">⬇️</button>
-            </div>
+            <button class="control-btn btn-up" onclick="changeDirection(0, -1)">⬆️</button>
+            <button class="control-btn btn-left" onclick="changeDirection(-1, 0)">⬅️</button>
+            <button class="control-btn btn-right" onclick="changeDirection(1, 0)">➡️</button>
+            <button class="control-btn btn-down" onclick="changeDirection(0, 1)">⬇️</button>
+            
+            <!-- Botón de reiniciar (Arriba a la derecha) -->
+            <button class="control-btn restart" onclick="restartCurrentLevel()">↺</button>
         </div>
+            
 
         <!-- OVERLAY DE NIVEL SUPERADO -->
         <div class="level-overlay" id="levelOverlay" style="display: none;">
